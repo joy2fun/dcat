@@ -2,6 +2,8 @@
 
 namespace Dcat\Admin\Console;
 
+use Illuminate\Support\Facades\Artisan;
+
 class ActionCommand extends GeneratorCommand
 {
     /**
@@ -39,6 +41,7 @@ class ActionCommand extends GeneratorCommand
     protected $namespaceMap = [
         'grid-batch' => 'Grid',
         'grid-row'   => 'Grid',
+        'grid-row-form'   => 'Grid',
         'grid-tool'  => 'Grid',
         'form-tool'  => 'Form',
         'show-tool'  => 'Show',
@@ -65,6 +68,12 @@ class ActionCommand extends GeneratorCommand
 
         $this->askBaseDirectory();
 
+        if ('grid-row-form' == $this->choice) {
+            Artisan::call('admin:form', [
+                'name' => $this->className . 'Form',
+            ]);
+        }
+
         return parent::handle();
     }
 
@@ -77,6 +86,7 @@ class ActionCommand extends GeneratorCommand
             'default',
             'grid-batch',
             'grid-row',
+            'grid-row-form',
             'grid-tool',
             'form-tool',
             'show-tool',

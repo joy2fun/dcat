@@ -15,8 +15,8 @@ class Permission extends Model implements Sortable
 {
     use HasDateTimeFormatter,
         ModelTree {
-            ModelTree::boot as treeBoot;
-        }
+        ModelTree::boot as treeBoot;
+    }
 
     /**
      * @var array
@@ -85,19 +85,22 @@ class Permission extends Model implements Sortable
      */
     public function shouldPassThrough(Request $request): bool
     {
-        if (! $this->http_path) {
+        if (!$this->http_path) {
             return false;
         }
 
         $method = $this->http_method;
 
-        $matches = array_map(function ($path) use ($method) {
+        // TODO: omni api request
+        $isApi = $request->is('api/*');
+
+        $matches = array_map(function ($path) use ($method, $isApi) {
             if (Str::contains($path, ':')) {
                 [$method, $path] = explode(':', $path);
                 $method = explode(',', $method);
             }
 
-            $path = Str::contains($path, '.') ? $path : ltrim(admin_base_path($path), '/');
+            $path = Str::contains($path, '.') ? $path : ltrim($isApi ? ((Str::startsWith($path, 'api') ? $path : 'api/' . ltrim($path, '/'))) : admin_base_path($path), '/');
 
             return compact('method', 'path');
         }, $this->http_path);
@@ -154,11 +157,11 @@ class Permission extends Model implements Sortable
      */
     protected function matchRequest(array $match, Request $request): bool
     {
-        if (! $path = trim($match['path'], '/')) {
+        if (!$path = trim($match['path'], '/')) {
             return false;
         }
 
-        if (! Helper::matchRequestPath($path, $request->decodedPath())) {
+        if (!Helper::matchRequestPath($path, $request->decodedPath())) {
             return false;
         }
 

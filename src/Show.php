@@ -77,6 +77,8 @@ class Show implements Renderable
      */
     protected $fields;
 
+    protected $renderedFields;
+
     /**
      * Relations to be show.
      *
@@ -116,6 +118,8 @@ class Show implements Renderable
                 $this->setKey($id);
         }
         $this->rows = new Collection();
+        $this->renderedFields = new Collection();
+
         $this->builder = $builder;
 
         $this->initModel($model);
@@ -123,6 +127,11 @@ class Show implements Renderable
         $this->initContents();
 
         $this->callResolving();
+    }
+
+    public function rendered()
+    {
+        return $this->renderedFields;
     }
 
     protected function initModel($model)

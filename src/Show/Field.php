@@ -733,7 +733,12 @@ HTML;
             });
         }
 
-        return view($this->view, $this->variables());
+        if (!$this->parent->rendered()->contains($this->name)) {
+            $this->parent->rendered()->push($this->name);
+            return view($this->view, $this->variables());
+        }
+
+        return  '';
     }
 
     /**

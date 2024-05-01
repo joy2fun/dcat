@@ -33,14 +33,14 @@ class Footer implements Renderable
      *
      * @var array
      */
-    protected $buttons = ['reset' => true, 'submit' => true];
+    protected $buttons = ['reset' => false, 'submit' => true];
 
     /**
      * Available checkboxes.
      *
      * @var array
      */
-    protected $checkboxes = ['view' => true, 'continue_editing' => true, 'continue_creating' => true];
+    protected $checkboxes = ['view' => false, 'continue_editing' => true, 'continue_creating' => true];
 
     /**
      * Default checked.

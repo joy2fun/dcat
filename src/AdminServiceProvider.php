@@ -71,6 +71,8 @@ class AdminServiceProvider extends ServiceProvider
         'admin.session'    => Http\Middleware\Session::class,
         'admin.upload'     => Http\Middleware\WebUploader::class,
         'admin.app'        => Http\Middleware\Application::class,
+        'admin.omni'       => Http\Middleware\Omni::class,
+        'admin.show_source' => Http\Middleware\ShowSource::class,
     ];
 
     /**
@@ -145,6 +147,7 @@ class AdminServiceProvider extends ServiceProvider
     protected function bootApplication()
     {
         Admin::app()->boot();
+        app('admin.omni')->boot();
     }
 
     /**
@@ -172,6 +175,7 @@ class AdminServiceProvider extends ServiceProvider
             $this->publishes([__DIR__.'/../resources/lang' => $this->app->langPath()], 'dcat-admin-lang');
             $this->publishes([__DIR__.'/../database/migrations' => database_path('migrations')], 'dcat-admin-migrations');
             $this->publishes([__DIR__.'/../resources/dist' => public_path(Admin::asset()->getRealPath('@admin'))], 'dcat-admin-assets');
+            $this->publishes([__DIR__.'/../examples' => base_path('examples')], 'dcat-admin-examples');
         }
     }
 
@@ -219,6 +223,7 @@ class AdminServiceProvider extends ServiceProvider
         $this->app->singleton('admin.app', Application::class);
         $this->app->singleton('admin.asset', Asset::class);
         $this->app->singleton('admin.color', Color::class);
+        $this->app->singleton('admin.omni', Omni::class);
         $this->app->singleton('admin.sections', SectionManager::class);
         $this->app->singleton('admin.extend', Manager::class);
         $this->app->singleton('admin.extend.update', function () {

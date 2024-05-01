@@ -6,6 +6,8 @@ use Dcat\Admin\Admin;
 use Dcat\Admin\Form;
 use Dcat\Admin\Http\Repositories\Permission;
 use Dcat\Admin\Layout\Content;
+use Dcat\Admin\Models\Permission as ModelsPermission;
+use Dcat\Admin\Support\Helper;
 use Dcat\Admin\Tree;
 use Illuminate\Support\Str;
 
@@ -18,6 +20,12 @@ class PermissionController extends AdminController
 
     public function index(Content $content)
     {
+        // TODO: omni api request
+        if (request()->is('api/*')) {
+            $permission = new Permission();
+            $list = ModelsPermission::all()->sortBy('order');
+            return Admin::json($permission->toTree($list->toArray()));
+        }
         return $content
             ->title($this->title())
             ->description(trans('admin.list'))
@@ -39,8 +47,8 @@ class PermissionController extends AdminController
 
                 $path = array_filter($branch['http_path']);
 
-                if (! $path) {
-                    return $payload.'</div>&nbsp;';
+                if (!$path) {
+                    return $payload . '</div>&nbsp;';
                 }
 
                 $max = 3;
@@ -57,9 +65,9 @@ class PermissionController extends AdminController
 
                         $method = array_merge($method, explode(',', $me));
                     }
-                    if ($path !== '...' && ! empty(config('admin.route.prefix')) && ! Str::contains($path, '.')) {
-                        $path = trim(admin_base_path($path), '/');
-                    }
+                    // if ($path !== '...' && ! empty(config('admin.route.prefix')) && ! Str::contains($path, '.')) {
+                    //     $path = trim(admin_base_path($path), '/');
+                    // }
 
                     $color = Admin::color()->primaryDarker();
 
@@ -70,7 +78,7 @@ class PermissionController extends AdminController
                     return strtoupper($name);
                 })->map(function ($name) {
                     return "<span class='label bg-primary'>{$name}</span>";
-                })->implode('&nbsp;').'&nbsp;';
+                })->implode('&nbsp;') . '&nbsp;';
 
                 $payload .= "</div>&nbsp; $method<a class=\"dd-nodrag\">$path</a>";
 
@@ -125,7 +133,7 @@ class PermissionController extends AdminController
                         return (new $model())->allNodes();
                     })
                     ->customFormat(function ($v) {
-                        if (! $v) {
+                        if (!$v) {
                             return [];
                         }
 
@@ -151,15 +159,15 @@ class PermissionController extends AdminController
         $container = collect();
 
         $routes = collect(app('router')->getRoutes())->map(function ($route) use ($prefix, $container) {
-            if (! Str::startsWith($uri = $route->uri(), $prefix) && $prefix && $prefix !== '/') {
+            if (!Str::startsWith($uri = $route->uri(), $prefix) && $prefix && $prefix !== '/') {
                 return;
             }
 
-            if (! Str::contains($uri, '{')) {
+            if (!Str::contains($uri, '{')) {
                 if ($prefix !== '/') {
-                    $route = Str::replaceFirst($prefix, '', $uri.'*');
+                    $route = Str::replaceFirst($prefix, '', $uri . '*');
                 } else {
-                    $route = $uri.'*';
+                    $route = $uri . '*';
                 }
 
                 if ($route !== '*') {

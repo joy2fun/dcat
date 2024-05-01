@@ -52,6 +52,9 @@ class Column implements Renderable
 
     protected function normalizeWidth($width)
     {
+        if (!is_numeric($width)) {
+            return $width;
+        }
         return (int) ($width < 1 ? round(12 * $width) : $width);
     }
 

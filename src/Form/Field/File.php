@@ -138,7 +138,7 @@ class File extends Field implements UploadFieldInterface
             $previews[] = [
                 'id'   => $value,
                 'path' => Helper::basename($value),
-                'url'  => $this->objectUrl($value),
+                'url'  => $this->objectUrl($value) . env('OSS_PREVIEW_QS'),
             ];
         }
 

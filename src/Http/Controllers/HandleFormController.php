@@ -93,10 +93,15 @@ class HandleFormController
      */
     protected function resolveForm(Request $request)
     {
-        if (! $request->has(Form::REQUEST_NAME)) {
-            throw new AdminException('Invalid form request.');
+        if ($action = $request->get('action')) {
+            $actions = config('admin.actions');
+            if ($actions[$action] ?? null) {
+                $request->merge([
+                    Form::REQUEST_NAME => $actions[$action]
+                ]);
+            }
         }
-
+        
         $formClass = $request->get(Form::REQUEST_NAME);
 
         if (! class_exists($formClass)) {

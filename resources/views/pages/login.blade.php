@@ -20,7 +20,8 @@
         text-align: left;
     }
 </style>
-
+{{-- prevent console error --}}
+<div class="horizontal-menu"><div class="main-horizontal-sidebar"></div></div>
 <div class="login-page bg-40">
     <div class="login-box">
         <div class="login-logo mb-2">
@@ -106,17 +107,25 @@
                             @endif
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary float-right login-btn">
-
+                    <button type="submit" class="btn btn-primary float-left login-btn">
                         {{ __('admin.login') }}
                         &nbsp;
-                        <i class="feather icon-arrow-right"></i>
                     </button>
+                    <span class="float-right">
+                        <a class="btn btn-secondary" href="/signup">注册新账号</a>
+                    </span>
                 </form>
 
             </div>
         </div>
     </div>
+    <footer class="">
+        <p class="clearfix blue-grey lighten-2 mb-0 text-center">
+            <span class="text-center d-block d-md-inline-block mt-25">
+                {!! config('admin.footer') !!}
+            </span>
+        </p>
+    </footer>
 </div>
 
 <script>

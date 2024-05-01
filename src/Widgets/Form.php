@@ -140,7 +140,7 @@ class Form implements Renderable
      *
      * @var array
      */
-    protected $buttons = ['reset' => true, 'submit' => true];
+    protected $buttons = ['reset' => false, 'submit' => true];
 
     /**
      * @var bool
@@ -248,7 +248,7 @@ class Form implements Renderable
     protected function initPayload()
     {
         if ($payload = \request(static::LAZY_PAYLOAD_NAME)) {
-            $this->payload(json_decode($payload, true) ?? []);
+            $this->payload(is_array($payload) ? $payload : json_decode($payload, true) ?? [] );
         }
     }
 
@@ -632,15 +632,14 @@ HTML;
     {
         if (! empty($this->buttons['reset'])) {
             $reset = trans('admin.reset');
-
-            return "<button type=\"reset\" class=\"btn btn-white pull-left\"><i class=\"feather icon-rotate-ccw\"></i> {$reset}</button>";
+            return "<button type=\"reset\" class=\"btn btn-white pull-right\"><i class=\"feather icon-rotate-ccw\"></i> {$reset}</button>";
         }
     }
 
     protected function renderSubmitButton()
     {
         if (! empty($this->buttons['submit'])) {
-            return "<button type=\"submit\" class=\"btn btn-primary pull-right\"><i class=\"feather icon-save\"></i> {$this->getSubmitButtonLabel()}</button>";
+            return "<button type=\"submit\" class=\"btn btn-primary pull-left\"><i class=\"feather icon-save\"></i> {$this->getSubmitButtonLabel()}</button>";
         }
     }
 

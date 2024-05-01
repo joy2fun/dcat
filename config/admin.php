@@ -365,4 +365,13 @@ return [
         // the extension files will be generated in this directory.
         'dir' => base_path('dcat-admin-extensions'),
     ],
+
+    'footer' => sprintf(<<<EOF
+        <span class="text-center d-block d-md-inline-block mt-25">
+            Powered by
+            <a target="_blank" href="https://github.com/jqhph/dcat-admin">Dcat Admin</a>
+            <span>&nbsp;·&nbsp;</span>
+            v%s
+        </span>
+    EOF, \Dcat\Admin\Admin::VERSION)
 ];

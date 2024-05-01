@@ -31,6 +31,8 @@ class Menu extends Model implements Sortable
         'sort_when_creating' => true,
     ];
 
+    protected $hidden = ['created_at', 'updated_at', 'extension'];
+
     /**
      * The attributes that are mass assignable.
      *

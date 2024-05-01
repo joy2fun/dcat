@@ -129,6 +129,10 @@ class ScaffoldController extends Controller
                 );
             }
 
+            if (in_array('omni', $creates)) {
+                app('admin.omni')->scaffold();
+            }
+
             // 2. Create controller.
             if (in_array('controller', $creates)) {
                 $paths['controller'] = (new ControllerCreator($controller))

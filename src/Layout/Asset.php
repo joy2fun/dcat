@@ -27,6 +27,14 @@ class Asset
                 '@admin/adminlte/adminlte.css',
             ],
         ],
+        '@jsoneditor' => [
+            'js' => [
+                '@admin/jsoneditor/jsoneditor.min.js',
+            ],
+            'css' => [
+                '@admin/jsoneditor/jsoneditor.min.css',
+            ],
+        ],
         '@nunito' => [
             //'css' => 'https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,800,800i,900,900i',
             'css' => '@admin/dcat/css/nunito.css',
@@ -685,7 +693,7 @@ class Asset
             $url .= '?';
         }
 
-        $ver = 'v'.Admin::VERSION;
+        $ver = 'v'.config('admin.asset_version');
 
         return Str::endsWith($url, '?') ? $url.$ver : $url.'&'.$ver;
     }

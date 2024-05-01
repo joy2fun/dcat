@@ -2,7 +2,11 @@
 
 namespace Dcat\Admin\Http\Controllers;
 
+use Dcat\Admin\Admin;
+use Dcat\Admin\Grid;
 use Dcat\Admin\Layout\Content;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Routing\Controller;
 
 class AdminController extends Controller
@@ -25,6 +29,8 @@ class AdminController extends Controller
         //        'edit'   => 'Edit',
         //        'create' => 'Create',
     ];
+
+    protected $breadcrumbs = null;
 
     /**
      * Set translation path.
@@ -63,6 +69,11 @@ class AdminController extends Controller
         return $this->translation;
     }
 
+    public function breadcrumbs(array $list)
+    {
+        return $this->breadcrumbs = $list;
+    }
+
     /**
      * Index interface.
      *
@@ -71,11 +82,32 @@ class AdminController extends Controller
      */
     public function index(Content $content)
     {
-        return $content
-            ->translation($this->translation())
-            ->title($this->title())
-            ->description($this->description()['index'] ?? trans('admin.list'))
-            ->body($this->grid());
+        /** @var Grid  */
+        $grid = $this->grid();
+        if (request()->is('api/*')) {
+            $grid->build();
+            $paginator = $grid->model()->paginator();
+            if ($paginator instanceof LengthAwarePaginator) {
+                return Admin::json([
+                    'items' => $paginator->items(),
+                    'total' => $paginator->total(),
+                    'page' => $paginator->currentPage(),
+                    'last' => $paginator->lastPage(),
+                    'per_page' => $paginator->perPage(),
+                ]);
+            } elseif ($paginator instanceof Paginator) {
+                return Admin::json(['items' => $paginator->items()]);
+            }
+        } else {
+            if ($this->breadcrumbs ?? null) {
+                call_user_func_array([$content, 'breadcrumb'], $this->breadcrumbs);
+            }
+            return $content
+                ->translation($this->translation())
+                ->title($this->title())
+                ->description($this->description()['index'] ?? trans('admin.list'))
+                ->body($grid);
+        }
     }
 
     /**
@@ -87,11 +119,19 @@ class AdminController extends Controller
      */
     public function show($id, Content $content)
     {
-        return $content
-            ->translation($this->translation())
-            ->title($this->title())
-            ->description($this->description()['show'] ?? trans('admin.show'))
-            ->body($this->detail($id));
+        if (request()->is('api/*')) {
+            return Admin::json($this->detail($id)->model()->toArray());
+        } else {
+            if ($this->breadcrumbs ?? null) {
+                call_user_func_array([$content, 'breadcrumb'], $this->breadcrumbs);
+            }
+            $detail = $this->detail($id);
+            return $content
+                ->translation($this->translation())
+                ->title($this->title())
+                ->description($this->description()['show'] ?? trans('admin.show'))
+                ->body($detail);
+        }
     }
 
     /**
@@ -103,11 +143,15 @@ class AdminController extends Controller
      */
     public function edit($id, Content $content)
     {
+        if ($this->breadcrumbs ?? null) {
+            call_user_func_array([$content, 'breadcrumb'], $this->breadcrumbs);
+        }
+        $form = $this->form()->edit($id);
         return $content
             ->translation($this->translation())
             ->title($this->title())
             ->description($this->description()['edit'] ?? trans('admin.edit'))
-            ->body($this->form()->edit($id));
+            ->body($form);
     }
 
     /**
@@ -118,11 +162,15 @@ class AdminController extends Controller
      */
     public function create(Content $content)
     {
+        if ($this->breadcrumbs ?? null) {
+            call_user_func_array([$content, 'breadcrumb'], $this->breadcrumbs);
+        }
+        $body = $this->form();
         return $content
             ->translation($this->translation())
             ->title($this->title())
             ->description($this->description()['create'] ?? trans('admin.create'))
-            ->body($this->form());
+            ->body($body);
     }
 
     /**

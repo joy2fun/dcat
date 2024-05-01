@@ -16,6 +16,7 @@
         'controller' => (trans('admin.scaffold.create_controller')),
         'migrate' => (trans('admin.scaffold.run_migrate')),
         'lang' => (trans('admin.scaffold.create_lang')),
+        'omni' => 'Omni',
     ]);
     old('create') ? $actionCreators->check(old('create')) : $actionCreators->checkAll(['migration', 'migrate']);
 @endphp
@@ -94,6 +95,13 @@
                     </div>
                 </div>
 
+                <div class="form-group row">
+                    <span for="omniRouteURI" class="col-sm-1 control-label text-capitalize">Route URI</span>
+
+                    <div class="col-sm-4">
+                        <input type="text" name="omni_route_uri" class="form-control text-capitalize" id="omniRouteURI" value="">
+                    </div>
+                </div>
 
                 <div class="form-group row">
                     <div class="offset-sm-1 col-sm-11 mt-1 text-capitalize">
@@ -352,6 +360,9 @@
                     if (translation.val() === "" && comment.val() !== "") {
                         translation.val(comment.val());
                     }
+                    if (/(:|\s\d).+/.test(comment.val())) {
+                        translation.val(comment.val().replace(/(:|\s\d).+$/, ""));
+                    }
                 });
             }
         });
@@ -431,6 +442,7 @@
 
                     addTimestamps(updated, created);
                     addSoftdelete(soft);
+                    $('#sync-translation-with-comment').trigger('click');
                 }
             });
 

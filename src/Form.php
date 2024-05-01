@@ -81,6 +81,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @method Field\KeyValue keyValue($column, $label = '')
  * @method Field\Tel tel($column, $label = '')
  * @method Field\Markdown markdown($column, $label = '')
+ * @method Field\Jsoneditor jsoneditor($column, $label = '')
  * @method Field\Range range($start, $end, $label = '')
  * @method Field\Color color($column, $label = '')
  * @method Field\ArrayField array($column, $labelOrCallback, $callback = null)
@@ -166,6 +167,7 @@ class Form implements Renderable
         'keyValue'            => Field\KeyValue::class,
         'tel'                 => Field\Tel::class,
         'markdown'            => Field\Markdown::class,
+        'jsoneditor'          => Field\JsonEditor::class,
         'range'               => Field\Range::class,
         'color'               => Field\Color::class,
         'array'               => Field\ArrayField::class,
@@ -649,6 +651,7 @@ class Form implements Renderable
             return $this->sendResponse(
                 $this->response()
                     ->redirectIf($url !== false, $url)
+                    ->data(method_exists($this->repository, 'model') ? $this->repository->model()->toArray() : $id)
                     ->success(trans('admin.save_succeeded'))
             );
         } catch (\Throwable $e) {

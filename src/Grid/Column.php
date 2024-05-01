@@ -24,7 +24,7 @@ use Illuminate\Support\Traits\Macroable;
  * @method $this image($server = '', int $width = 200, int $height = 200)
  * @method $this label($style = 'primary', int $max = null)
  * @method $this button($style = 'success');
- * @method $this link($href = '', $target = '_blank');
+ * @method $this link($href = '', $target = '_self');
  * @method $this badge($style = 'primary', int $max = null);
  * @method $this progressBar($style = 'primary', $size = 'sm', $max = 100)
  * @method $this checkbox($options = [], $refresh = false)
@@ -32,6 +32,7 @@ use Illuminate\Support\Traits\Macroable;
  * @method $this expand($callbackOrButton = null)
  * @method $this table($titles = [])
  * @method $this select($options = [], $refresh = false)
+ * @method $this dropdown($options = [], $refresh = false)
  * @method $this modal($title = '', $callback = null)
  * @method $this showTreeInDialog($callbackOrNodes = null)
  * @method $this qrcode($formatter = null, $width = 150, $height = 150)
@@ -75,6 +76,7 @@ class Column
         'switch'           => Displayers\SwitchDisplay::class,
         'switchGroup'      => Displayers\SwitchGroup::class,
         'select'           => Displayers\Select::class,
+        'dropdown'         => Displayers\Dropdown::class,
         'image'            => Displayers\Image::class,
         'label'            => Displayers\Label::class,
         'button'           => Displayers\Button::class,
@@ -471,7 +473,7 @@ class Column
      */
     public function hasDisplayCallbacks()
     {
-        return ! empty($this->displayCallbacks);
+        return !empty($this->displayCallbacks);
     }
 
     /**
@@ -502,7 +504,7 @@ class Column
         foreach ($this->displayCallbacks as $callback) {
             [$callback, $params] = $callback;
 
-            if (! $callback instanceof \Closure) {
+            if (!$callback instanceof \Closure) {
                 $value = $callback;
                 continue;
             }
@@ -553,13 +555,19 @@ class Column
             $row = $this->convertModelToArray($row);
 
             $i++;
-            if (! isset($row['#'])) {
+            if (!isset($row['#'])) {
                 $row['#'] = $i;
             }
 
-            $this->setOriginal(Arr::get($this->originalModel, $this->name));
+            $original = Arr::get($this->originalModel, $this->name);
 
-            $this->setValue($value = $this->htmlEntityEncode($original = Arr::get($row, $this->name)));
+            if ($original !== null && !Arr::has($row, $this->name)) {
+                Helper::arraySet($row, $this->name, $original);
+            }
+
+            $this->setOriginal($original);
+
+            $this->setValue($value = $this->htmlEntityEncode($original));
 
             if ($original === null) {
                 $original = (string) $original;
@@ -778,7 +786,7 @@ class Column
     public function __call($method, $arguments)
     {
         if (
-            ! isset(static::$displayers[$method])
+            !isset(static::$displayers[$method])
             && static::hasMacro($method)
         ) {
             return $this->__macroCall($method, $arguments);

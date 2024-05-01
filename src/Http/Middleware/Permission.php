@@ -6,8 +6,10 @@ use Dcat\Admin\Admin;
 use Dcat\Admin\Exception\RuntimeException;
 use Dcat\Admin\Http\Auth\Permission as Checker;
 use Dcat\Admin\Support\Helper;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\UnauthorizedException;
 
 class Permission
 {
@@ -29,9 +31,9 @@ class Permission
         $user = Admin::user();
 
         if (
-            ! $user
-            || ! empty($args)
-            || ! config('admin.permission.enable')
+            !$user
+            || !empty($args)
+            || !config('admin.permission.enable')
             || $this->shouldPassThrough($request)
             || $user->isAdministrator()
             || $this->checkRoutePermission($request)
@@ -39,9 +41,13 @@ class Permission
             return $next($request);
         }
 
-        if (! $user->allPermissions()->first(function ($permission) use ($request) {
+        if (!$user->allPermissions()->first(function ($permission) use ($request) {
             return $permission->shouldPassThrough($request);
         })) {
+            // TODO: omni api request
+            if ($request->is('api/*')) {
+                abort(403);
+            }
             Checker::error();
         }
 
@@ -57,7 +63,7 @@ class Permission
      */
     public function checkRoutePermission(Request $request)
     {
-        if (! $middleware = collect($request->route()->middleware())->first(function ($middleware) {
+        if (!$middleware = collect($request->route()->middleware())->first(function ($middleware) {
             return Str::startsWith($middleware, $this->middlewarePrefix);
         })) {
             return false;
@@ -67,7 +73,7 @@ class Permission
 
         $method = array_shift($args);
 
-        if (! method_exists(Checker::class, $method)) {
+        if (!method_exists(Checker::class, $method)) {
             throw new RuntimeException("Invalid permission method [$method].");
         }
 

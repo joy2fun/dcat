@@ -1,0 +1,25 @@
+<?php
+
+namespace DummyNamespace;
+
+use Dcat\Admin\Grid\RowAction;
+use Dcat\Admin\Widgets\Modal;
+use App\Admin\Forms\DummyClassForm;
+
+class DummyClass extends RowAction
+{
+    /**
+     * @return string
+     */
+	protected $title = "<div><i class='fa fa-reply'></i> Action</div>";
+
+    public function render()
+    {
+        $form = DummyClassForm::make()->payload(['id' => $this->getKey()]);
+        return Modal::make()
+            ->lg()
+            ->title($this->title)
+            ->body($form)
+            ->button($this->title);
+    }
+}

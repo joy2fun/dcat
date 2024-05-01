@@ -9,8 +9,30 @@
 
     {!! $grid->renderHeader() !!}
 
+    @if (defined('IS_MOBILE') && IS_MOBILE)
+    <div class="{!! $grid->formatTableParentClass() !!}">
+    @foreach($grid->rows() as $row)
+        <div class="card">
+            <ul class="list-group list-group-flush">
+                @foreach($grid->getVisibleColumns() as $column)
+                    <li class="list-group-item"}>
+                        {!! $column->getLabel() !!}：
+                        <span class="float-right">{!! $row->column($column->getName()) !!}</span>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    @endforeach
+    @if ($grid->rows()->isEmpty())
+    <div class="alert alert-light" role="alert">
+        暂无记录。
+    </div>
+    @endif
+    </div>
+    @else
     <div class="{!! $grid->formatTableParentClass() !!}">
         <table class="{{ $grid->formatTableClass() }}" id="{{ $tableId }}" >
+            @if ($grid->option('display_table_header'))
             <thead>
             @if ($headers = $grid->getVisibleComplexHeaders())
                 <tr>
@@ -25,6 +47,7 @@
                 @endforeach
             </tr>
             </thead>
+            @endif
 
             @if ($grid->hasQuickCreate())
                 {!! $grid->renderQuickCreate() !!}
@@ -48,6 +71,7 @@
             </tbody>
         </table>
     </div>
+    @endif
 
     {!! $grid->renderFooter() !!}
 

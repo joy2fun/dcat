@@ -25,7 +25,9 @@ class Select extends Presenter
     /**
      * @var array
      */
-    protected $config = [];
+    protected $config = [
+        'minimumResultsForSearch' => 8,
+    ];
 
     /**
      * @var string

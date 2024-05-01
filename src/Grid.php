@@ -167,11 +167,13 @@ class Grid
         'toolbar'             => true,
         'create_mode'         => self::CREATE_MODE_DEFAULT,
         'dialog_form_area'    => ['700px', '670px'],
+        'table_parent_class'  => ['table-responsive', 'table-wrapper', 'complex-container', 'table-middle', 'mt-1'],
         'table_class'         => ['table', 'custom-data-table', 'data-table'],
         'scrollbar_x'         => false,
         'actions_class'       => null,
         'batch_actions_class' => null,
         'paginator_class'     => null,
+        'display_table_header' => true,
     ];
 
     /**
@@ -227,6 +229,16 @@ class Grid
     public function getTableId()
     {
         return $this->tableId;
+    }
+
+    /**
+     * Get table ID.
+     *
+     * @return string
+     */
+    public function setTableId(string $id)
+    {
+        return $this->tableId = $id;
     }
 
     /**
@@ -370,6 +382,10 @@ class Grid
         return $this;
     }
 
+    public function showTableHeader(bool $value = true) {
+        $this->option('display_table_header', $value);
+    }
+
     /**
      * Add column to grid.
      *
@@ -442,6 +458,53 @@ class Grid
     }
 
     /**
+     * @return $this
+     */
+    public function compact()
+    {
+        $this->addTableClass(['table-sm', 'mt-0']);
+        $this->autoHeight();
+
+        Admin::style('
+            table.table-sm th:first-child,
+            table.table-sm td:first-child{padding-left: 1rem;}
+        ');
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function striped()
+    {
+        $this->addTableClass(['table-striped']);
+        $this->removeTableClass(['custom-data-table', 'data-table']);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function autoHeight()
+    {
+        $this->addTableClass(['auto-height']);
+        Admin::style('table.auto-height td {height: unset!important;} ');
+    }
+
+    /**
+     * @return $this
+     */
+    public function marginTop($mt = 0)
+    {
+        $this->addTableParentClass(['custom-mt']);
+        Admin::style(sprintf('
+            .custom-mt {margin-top: 0!important;}
+            .custom-mt table#%s {margin-top: %s!important;}
+        ', $this->getTableId(), $mt));
+    }
+
+    /**
      * @param  string|array  $class
      * @return $this
      */
@@ -452,10 +515,49 @@ class Grid
         return $this;
     }
 
+    public function hasTableClass($class) {
+        return in_array($class, $this->options['table_class']);
+    }
+
+    /**
+     * @param  string|array  $class
+     * @return $this
+     */
+    public function addTableParentClass($class)
+    {
+        $this->options['table_parent_class'] = array_merge((array) $this->options['table_parent_class'], (array) $class);
+
+        return $this;
+    }
+
+    /**
+     * @param string|string $class
+     * 
+     * @return $this
+     */
+    public function removeTableClass($class)
+    {
+        $this->options['table_class'] = array_diff($this->options['table_class'], (array) $class);
+
+        return $this;
+    }
+
+    /**
+     * @param string|string $class
+     * 
+     * @return $this
+     */
+    public function removeTableParentClass($class)
+    {
+        $this->options['table_parent_class'] = array_diff($this->options['table_parent_class'], (array) $class);
+
+        return $this;
+    }
+
     public function formatTableClass()
     {
         if ($this->options['bordered']) {
-            $this->addTableClass(['table-bordered', 'complex-headers', 'data-table']);
+            $this->addTableClass(['table-bordered', 'complex-headers']);
         }
 
         return implode(' ', array_unique((array) $this->options['table_class']));
@@ -993,8 +1095,8 @@ HTML;
     {
         $tableCollaps = $this->option('table_collapse') ? 'table-collapse' : '';
         $scrollbarX = $this->option('scrollbar_x') ? 'table-scrollbar-x' : '';
-
-        return "table-responsive table-wrapper complex-container table-middle mt-1 {$tableCollaps} {$scrollbarX}";
+        $parentClass = implode(' ', $this->option('table_parent_class'));
+        return "{$parentClass} {$tableCollaps} {$scrollbarX}";
     }
 
     /**

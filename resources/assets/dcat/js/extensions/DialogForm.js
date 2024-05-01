@@ -18,6 +18,11 @@ export default class DialogForm {
             buttonSelector: '',
             // 弹窗大小
             area: [],
+            // 自动最大化宽度最小像素
+            autoMaxWidthThreshold: 500,
+            autoMaxWidth: '100%',
+            autoMaxHeight: '100%',
+            layerOptions: {},
             // 语言包
             lang: {
                 submit: Dcat.lang['submit'] || 'Submit',
@@ -147,14 +152,13 @@ export default class DialogForm {
         template = Dcat.assets.resolveHtml(template).render();
         
         let btns = [options.lang.submit],
-            dialogOpts = {
+            dialogOpts = $.extend({
                 type: 1,
                 area: (function (v) {
                         // 屏幕小于800则最大化展示
-                        if (w.screen.width <= 800) {
-                            return ['100%', '100%',];
+                        if (w.screen.width <= options.autoMaxWidthThreshold) {
+                            return [options.autoMaxWidth, options.autoMaxHeight];
                         }
-    
                         return v;
                     })(options.area),
                 content: template,
@@ -170,7 +174,7 @@ export default class DialogForm {
                         return false;
                     }
                 }
-            };
+            }, options.layerOptions);
 
         if (options.resetButton) {
             btns.push(options.lang.reset);

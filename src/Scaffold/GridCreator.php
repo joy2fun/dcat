@@ -19,6 +19,8 @@ trait GridCreator
             "\$grid->column('{$primaryKey}')->sortable();",
         ];
 
+        $addtionalFilters = '';
+
         foreach ($fields as $field) {
             if (empty($field['name'])) {
                 continue;
@@ -28,8 +30,16 @@ trait GridCreator
                 continue;
             }
 
-            $rows[] = "            \$grid->column('{$field['name']}');";
+            if (preg_match_all('~(?<keys>[0-9]+)[=]?(?<values>[^\s=,]+)~isx', $field['comment'], $match) > 1) {
+                $guessedOptions = str(request('model_name'))->classBasename() . '::' . $field['name'];
+                $rows[] = "            \$grid->column('{$field['name']}')->dropdown($guessedOptions);";
+                $addtionalFilters .= "                \$filter->equal('{$field['name']}')->select($guessedOptions);\n";
+            } else {
+                $rows[] = "            \$grid->column('{$field['name']}');";
+            }
         }
+
+        $addtionalFilters = trim($addtionalFilters);
 
         if ($timestamps) {
             $rows[] = '            $grid->column(\'created_at\');';
@@ -40,7 +50,7 @@ trait GridCreator
         
             \$grid->filter(function (Grid\Filter \$filter) {
                 \$filter->equal('$primaryKey');
-        
+                $addtionalFilters
             });
 EOF;
 

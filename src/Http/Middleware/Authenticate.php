@@ -19,11 +19,16 @@ class Authenticate
     public function handle($request, Closure $next)
     {
         if (
-            ! config('admin.auth.enable', true)
-            || ! Admin::guard()->guest()
+            !config('admin.auth.enable', true)
+            || !Admin::guard()->guest()
             || $this->shouldPassThrough($request)
         ) {
             return $next($request);
+        }
+
+        // TODO: omni api request
+        if ($request->is('api/*')) {
+            abort(401);
         }
 
         return admin_redirect('auth/login', 401);

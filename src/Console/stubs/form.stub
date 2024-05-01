@@ -2,10 +2,14 @@
 
 namespace DummyNamespace;
 
+use Dcat\Admin\Contracts\LazyRenderable;
+use Dcat\Admin\Traits\LazyWidget;
 use Dcat\Admin\Widgets\Form;
 
-class DummyClass extends Form
+class DummyClass extends Form implements LazyRenderable
 {
+    use LazyWidget;
+
     /**
      * Handle the form request.
      *
@@ -30,8 +34,8 @@ class DummyClass extends Form
      */
     public function form()
     {
-        $this->text('name')->required();
-        $this->email('email')->rules('email');
+        $this->hidden('id');
+        
     }
 
     /**
@@ -42,8 +46,7 @@ class DummyClass extends Form
     public function default()
     {
         return [
-            'name'  => 'John Doe',
-            'email' => 'John.Doe@gmail.com',
+            'id' => request('id'),
         ];
     }
 }
