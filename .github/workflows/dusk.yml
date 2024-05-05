@@ -2,9 +2,9 @@ name: Laravel Dusk
 
 on:
   push:
-    branches: [ 2.0 ]
+    branches: [ master ]
   pull_request:
-    branches: [ 2.0 ]
+    branches: [ master ]
 
 jobs:
   laravel10:
