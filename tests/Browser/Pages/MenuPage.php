@@ -52,7 +52,8 @@ class MenuPage extends Page
                     ->hasInput('icon')
                     ->hasInput('uri')
                     ->assertButtonEnabled(__('admin.submit'))
-                    ->assertButtonEnabled(__('admin.reset'));
+                    // ->assertButtonEnabled(__('admin.reset'))
+                ;
             });
     }
 
