@@ -44,7 +44,10 @@ class OmniController extends AdminController
                 }
             });
 
-            // TODO: skip for api requests
+            if ($omni->isApiRequest()) {
+                return ;
+            }
+
             foreach($omni->getColumns() as $options) {
                 /** @var OmniColumn $options */
                 if (! $options->grid_showed) continue;
@@ -88,9 +91,9 @@ class OmniController extends AdminController
                     $_->rules($options->rules);
                 }
 
-                // TODO: skip for api requests
-                if (strlen($options->default)) {
-                    $_->default($options->default);
+                // skip for api requests
+                if ($omni->isApiRequest()) {
+                    continue;
                 }
 
                 foreach($options->formColumnCallsArray as $func => $args) {

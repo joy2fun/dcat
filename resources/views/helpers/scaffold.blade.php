@@ -96,10 +96,10 @@
                 </div>
 
                 <div class="form-group row">
-                    <span for="omniRouteURI" class="col-sm-1 control-label text-capitalize">Route URI</span>
+                    <span for="omniRouteURI" class="col-sm-1 control-label">Route URI</span>
 
                     <div class="col-sm-4">
-                        <input type="text" name="omni_route_uri" class="form-control text-capitalize" id="omniRouteURI" value="">
+                        <input type="text" name="omni_route_uri" class="form-control" id="omniRouteURI" value="">
                     </div>
                 </div>
 

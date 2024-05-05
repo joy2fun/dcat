@@ -26,12 +26,12 @@ class OmniColumnController extends AdminController
             $grid->column('grid_showed', 'In grid')->dropdown(OmniColumn::grid_showed);
             $grid->column('mode')->dropdown(OmniColumn::mode);
             $grid->column('rules')->editable();
-            $grid->column('dict')->display(fn ($v) => sprintf('<pre>%s</pre>', ($v)));
             // $grid->column('grid_calls');
             // $grid->column('filter_calls');
             // $grid->column('form_calls');
         
             $grid->filter(function (Grid\Filter $filter) {
+                $filter->panel();
                 $filter->equal('table_name', 'table')->width(2);
                 $filter->equal('grid_showed', 'in grid')->select(OmniColumn::grid_showed)->width(2);
                 $filter->equal('mode')->select(OmniColumn::mode)->width(2);

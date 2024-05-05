@@ -86,6 +86,7 @@ class AdminServiceProvider extends ServiceProvider
             'admin.permission',
             'admin.session',
             'admin.upload',
+            'admin.show_source',
         ],
     ];
 

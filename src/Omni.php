@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Route;
 class Omni
 {
 
+    protected $enabled;
+
     /**
      * @var Collection $routes
      */
@@ -25,6 +27,7 @@ class Omni
 
     public function __construct()
     {
+        $this->enabled = config('admin.omni.enable', false);
     }
 
     public function resolveRoute($id)
@@ -58,17 +61,13 @@ class Omni
 
     public function isApiRequest()
     {
-        return config('admin.omni.enable') 
-            && $this->currentRoute->response_json;
+        return $this->enabled 
+            && $this->currentRoute?->response_json;
     }
 
     public function boot(): void
     {
-        if (! config('admin.omni.enable', false)) {
-            return;
-        }
-
-        if (request()->is('*omni-route*')) {
+        if (! $this->enabled) {
             return;
         }
 
@@ -105,21 +104,56 @@ class Omni
         }
     }
 
+    /**
+     * filter config example
+     * {
+     *      "op": "equal",
+     *      "column": "name",
+     *      "calls": {
+     *        "width": 2
+     *      }
+     *  }
+     */
     public function scaffold()
     {
         $input = request()->all();
 
+        $gridModelCalls = [];
+        $gridCalls = [];
         $filterCalls = [];
 
+        if ($input['primary_key']) {
+            $gridModelCalls['orderByDesc'] = $input['primary_key'];
+        }
+
+        $quickSearchColumns = [];
+
         foreach ($input['fields'] as $field) {
-            $dict = $this->parseDict($field['comment']);
+            $dict = $this->parseDict((string) $field['comment']);
             $searchable = ($field['nullable'] ?? '') != 'on';
             $gridColumnCalls = [];
             $formColumnCalls = [];
 
+            if ($searchable) {
+                $columnFilter = [
+                    'op' => $field['type'] == 'string' ? 'like' : 'equal',
+                    'column' => $field['name'],
+                ];
+
+                if ($field['key'] ?? null) {
+                    $quickSearchColumns[] = $field['name'];
+                }
+            } else {
+                $columnFilter = null;
+            }
+
             if ($dict) {
                 $gridColumnCalls['dropdown'] = null;
                 $formColumnCalls['options'] = null;
+                if ($columnFilter) {
+                    $columnFilter['op'] = 'equal';
+                    $columnFilter['calls']['select'] = null;
+                }
             }
 
             $row = OmniColumn::where([
@@ -136,13 +170,21 @@ class Omni
                 $row->input_type = $dict ? 'radio' : 'text';
                 $row->default = $field['default'] ?? '';
                 $row->grid_showed =  $searchable ? 1 : 0;
-                $row->mode = $input['primary_key'] == $field['name'] ? '-' : 'CU';
+                $row->mode = $input['primary_key'] == $field['name'] ? 3 : 0;
                 $row->rules = '';
                 $row->dict = json_encode($dict, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT);
                 $row->grid_column_calls = json_encode($gridColumnCalls, JSON_UNESCAPED_UNICODE);
                 $row->form_column_calls = json_encode($formColumnCalls, JSON_UNESCAPED_UNICODE);
                 $row->save();
             }
+
+            if ($columnFilter) {
+                $filterCalls[] = $columnFilter;
+            }
+        }
+
+        if ($quickSearchColumns) {
+            $gridCalls['quickSearch'] = $quickSearchColumns;
         }
 
         if ($input['omni_route_uri']) {
@@ -158,9 +200,9 @@ class Omni
                 $route->model_name = class_exists($input['model_name']) ? $input['model_name'] : '';
                 $route->filter_calls = json_encode($filterCalls, JSON_UNESCAPED_UNICODE);
                 $route->form_calls = '{}';
-                $route->grid_calls = '{}';
+                $route->grid_calls = json_encode($gridCalls, JSON_UNESCAPED_UNICODE);
                 $route->detail_model_calls = '{}';
-                $route->grid_model_calls = '{}';
+                $route->grid_model_calls = json_encode($gridModelCalls, JSON_UNESCAPED_UNICODE);
                 $route->calls = '{}';
                 $route->save();
             }

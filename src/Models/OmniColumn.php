@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $default
  * @property string|null $dict
  * @property int $grid_showed 表格: 1=是 0=否
- * @property int $mode 模式: 0=CU 1=C 2=U
+ * @property int $mode 模式: 0=CU 1=C 2=U 3=-
  * @property string|null $rules
  * @property string|null $grid_calls
  * @property string|null $filter_calls

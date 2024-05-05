@@ -19,19 +19,22 @@ class OmniRouteController extends AdminController
     protected function grid()
     {
         return Grid::make((new OmniRoute)->orderByDesc('id'), function (Grid $grid) {
-            $grid->column('id')->link(fn ($v) => admin_url('omni-route/'.$v.'/edit'));
+            $grid->column('id')->link(fn ($v) => admin_url('omni-route/' . $v . '/edit'));
             $grid->column('uri')->copyable();
             $grid->column('enabled')->dropdown(OmniRoute::enabled);
             $grid->column('soft_deleted')->dropdown(OmniRoute::enabled);
+            $grid->column('response_json')->dropdown(OmniRoute::enabled);
             $grid->column('table_name')->link(fn ($v) => admin_url('omni-column?table_name=' . $v));
             $grid->column('model_name')->link(fn ($v) => admin_url('?show_source=' . $v), '_blank');
-            $grid->column('calls')->display(fn ($v) => sprintf('<pre>%s</pre>', ($v)));
+            // $grid->column('calls')->display(fn ($v) => sprintf('<pre>%s</pre>', ($v)));
             $grid->column('enabled')->dropdown(OmniRoute::enabled);
-        
+
             $grid->filter(function (Grid\Filter $filter) {
+                $filter->panel()->expand();
                 $filter->equal('table_name')->width(2);
                 $filter->like('uri')->width(2);
                 $filter->equal('enabled')->select(OmniRoute::enabled)->width(2);
+                $filter->equal('response_json')->select(OmniRoute::enabled)->width(3);
             });
         });
     }
@@ -66,15 +69,24 @@ class OmniRouteController extends AdminController
         return Form::make(new OmniRoute(), function (Form $form) {
             $form->radio('enabled')->options(OmniRoute::enabled)->default("1");
             $form->radio('soft_deleted')->options(OmniRoute::enabled)->default("1");
+            $form->radio('response_json')->options(OmniRoute::enabled)->default("1");
             $form->text('uri')->required();
             $form->text('table_name')->required();
             $form->text('model_name');
             $form->jsoneditor('calls')->rules('json');
             $form->jsoneditor('grid_model_calls')->rules('json');
-            $form->jsoneditor('filter_calls')->rules('json');
+            $form->jsoneditor('filter_calls')->rules('json')
+                ->help($this->helpLink('help', 'Dcat\Admin\Grid\Filter'));
             $form->jsoneditor('detail_model_calls')->rules('json');
-            $form->jsoneditor('grid_calls')->rules('json');
-            $form->jsoneditor('form_calls')->rules('json');
+            $form->jsoneditor('grid_calls')->rules('json')
+                ->help($this->helpLink('help', 'Dcat\Admin\Grid\Column'));
+            $form->jsoneditor('form_calls')->rules('json')
+                ->help($this->helpLink('help', 'Dcat\Admin\Widgets\Form'));
         });
+    }
+
+    private function helpLink($text, $class)
+    {
+        return sprintf('<a href="%s" target="_blank">%s</a>', admin_url('?show_source=' . $class), $text);
     }
 }
