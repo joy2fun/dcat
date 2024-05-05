@@ -25,7 +25,6 @@ class Omni
 
     public function __construct()
     {
-        $this->routes = OmniRoute::where('enabled', 1)->get();
     }
 
     public function resolveRoute($id)
@@ -59,9 +58,16 @@ class Omni
 
     public function boot(): void
     {
+
+        if (!config('admin.enable.omni', false)) {
+            return;
+        }
+
         if (request()->is('*omni-route*')) {
             return;
         }
+
+        $this->routes = OmniRoute::where('enabled', 1)->get();
 
         $this->routes->map(function ($route) {
             Route::group([

@@ -314,6 +314,8 @@ return [
         'omni_column_table' => 'admin_omni_column',
     ],
 
+    'enable.omni' => env('ADMIN_ENABLE_OMNI', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application layout
