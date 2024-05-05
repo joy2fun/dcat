@@ -111,9 +111,6 @@
                         {{ __('admin.login') }}
                         &nbsp;
                     </button>
-                    <span class="float-right">
-                        <a class="btn btn-secondary" href="/signup">注册新账号</a>
-                    </span>
                 </form>
 
             </div>
