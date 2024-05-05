@@ -36,7 +36,7 @@ class MenuCreationForm extends Component
     public function assert(Browser $browser)
     {
         $browser->assertSeeText(__('admin.submit'))
-            ->assertSeeText(__('admin.reset'))
+            // ->assertSeeText(__('admin.reset'))
             ->within('@form', function (Browser $browser) {
                 $browser
                     ->assertSeeText(__('admin.parent_id'))

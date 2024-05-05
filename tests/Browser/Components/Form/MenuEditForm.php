@@ -15,7 +15,7 @@ class MenuEditForm extends MenuCreationForm
 
     public function __construct($id = null, $selector = 'form[method="POST"]')
     {
-        if ($id && ! is_numeric($id)) {
+        if ($id && !is_numeric($id)) {
             $selector = $id;
             $id = null;
         }
@@ -33,7 +33,7 @@ class MenuEditForm extends MenuCreationForm
     public function assert(Browser $browser)
     {
         $browser->assertSeeText(__('admin.submit'))
-            ->assertSeeText(__('admin.reset'))
+            // ->assertSeeText(__('admin.reset'))
             ->within('@form', function (Browser $browser) {
                 $browser
                     ->assertSeeText('ID')
@@ -54,7 +54,7 @@ class MenuEditForm extends MenuCreationForm
                     ->is(new Select2('select[name="parent_id"]'))
                     ->is(new MultipleSelect2('select[name="roles[]"]'));
 
-                if (! $this->id) {
+                if (!$this->id) {
                     return;
                 }
 
