@@ -314,7 +314,9 @@ return [
         'omni_column_table' => 'admin_omni_column',
     ],
 
-    'enable.omni' => env('ADMIN_ENABLE_OMNI', false),
+    'omni' => [
+        'enable' => env('ADMIN_ENABLE_OMNI', false),
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -375,8 +377,6 @@ return [
         <span class="text-center d-block d-md-inline-block mt-25">
             Powered by
             <a target="_blank" href="https://github.com/jqhph/dcat-admin">Dcat Admin</a>
-            <span>&nbsp;·&nbsp;</span>
-            v%s
         </span>
-    EOF, \Dcat\Admin\Admin::VERSION)
+    EOF)
 ];
