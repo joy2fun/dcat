@@ -26,8 +26,6 @@ class Omni
     public function __construct()
     {
         $this->routes = OmniRoute::where('enabled', 1)->get();
-
-        $this->boot();
     }
 
     public function resolveRoute($id)
@@ -62,16 +60,16 @@ class Omni
     public function boot(): void
     {
         if (request()->is('*omni-route*')) {
-            return ;
+            return;
         }
 
         $this->routes->map(function ($route) {
             Route::group([
                 'middleware' => 'admin.omni:' . $route->id
-            ], function($router) use ($route) {
+            ], function ($router) use ($route) {
                 $router = $router->resource($route->uri, OmniController::class);
                 foreach ($route->calls_array as $func => $args) {
-                    switch($func) {
+                    switch ($func) {
                         case "middleware":
                             $router->$func($args);
                             break;
@@ -102,8 +100,7 @@ class Omni
 
         $filterCalls = [];
 
-        foreach ($input['fields'] as $field) 
-        {
+        foreach ($input['fields'] as $field) {
             $dict = $this->parseDict($field['comment']);
             $searchable = ($field['nullable'] ?? '') != 'on';
             $gridColumnCalls = [];
@@ -159,7 +156,7 @@ class Omni
         }
     }
 
-    private function parseDict(string $str) 
+    private function parseDict(string $str)
     {
         $count = preg_match_all('~(?<keys>[0-9]+)[=]?(?<values>[^\s=,]+)~isx', $str, $match);
         if ($count > 1) {
