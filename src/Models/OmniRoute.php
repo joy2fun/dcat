@@ -39,6 +39,13 @@ class OmniRoute extends Model
         0 => "N",
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->init();
+    }
+
     protected function init()
     {
         $connection = config('admin.database.connection') ?: config('database.default');

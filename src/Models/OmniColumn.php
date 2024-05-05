@@ -66,6 +66,13 @@ class OmniColumn extends Model
         3 => '-',
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->init();
+    }
+
     public function scopeCurrent(Builder $query)
     {
         return $query->where('table_name', app('admin.omni')->getTableName());

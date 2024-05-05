@@ -56,10 +56,15 @@ class Omni
         return $this->getColumns()->firstWhere('column_name', '=', $name);
     }
 
+    public function isApiRequest()
+    {
+        return config('admin.omni.enable') 
+            && $this->currentRoute->response_json;
+    }
+
     public function boot(): void
     {
-
-        if (!config('admin.enable.omni', false)) {
+        if (! config('admin.omni.enable', false)) {
             return;
         }
 
