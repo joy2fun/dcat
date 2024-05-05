@@ -309,6 +309,9 @@ return [
         'settings_table'         => 'admin_settings',
         'extensions_table'       => 'admin_extensions',
         'extension_histories_table' => 'admin_extension_histories',
+
+        'omni_route_table' => 'admin_omni_route',
+        'omni_column_table' => 'admin_omni_column',
     ],
 
     /*
