@@ -32,8 +32,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class OmniRoute extends Model
 {
-	use HasDateTimeFormatter;
-    
+    use HasDateTimeFormatter;
+
     const enabled = [
         1 => "Y",
         0 => "N",
@@ -45,27 +45,27 @@ class OmniRoute extends Model
 
         $this->setConnection($connection);
 
-        $this->setTable(config('admin.database.omni_route_table', 'omni_routes'));
+        $this->setTable(config('admin.database.omni_route_table'));
     }
 
     public function getModelClassAttribute()
     {
-        return $this->model_name ?: ($this->soft_deleted ? OmniSoftDelete::class : Omni::class); 
+        return $this->model_name ?: ($this->soft_deleted ? OmniSoftDelete::class : Omni::class);
     }
 
     public function getGridModelCallsArrayAttribute()
     {
-        return $this->grid_model_calls && $this->grid_model_calls !== 'null' ? Json::decode($this->grid_model_calls) : []; 
+        return $this->grid_model_calls && $this->grid_model_calls !== 'null' ? Json::decode($this->grid_model_calls) : [];
     }
 
     public function getDetailModelCallsArrayAttribute()
     {
-        return $this->detail_model_calls && $this->detail_model_calls !== 'null' ? Json::decode($this->detail_model_calls) : []; 
+        return $this->detail_model_calls && $this->detail_model_calls !== 'null' ? Json::decode($this->detail_model_calls) : [];
     }
 
     public function getCallsArrayAttribute()
     {
-        return $this->calls && $this->calls !== 'null' ? Json::decode($this->calls) : []; 
+        return $this->calls && $this->calls !== 'null' ? Json::decode($this->calls) : [];
     }
 
     public function getGridCallsArrayAttribute()

@@ -52,7 +52,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class OmniColumn extends Model
 {
-	use HasDateTimeFormatter;
+    use HasDateTimeFormatter;
 
     const grid_showed = [
         1 => "Y",
@@ -77,7 +77,7 @@ class OmniColumn extends Model
 
         $this->setConnection($connection);
 
-        $this->setTable(config('admin.database.omni_column_table', 'omni_columns'));
+        $this->setTable(config('admin.database.omni_column_table'));
     }
 
     public function getDictArrayAttribute()
@@ -94,5 +94,4 @@ class OmniColumn extends Model
     {
         return $this->form_column_calls && $this->form_column_calls !== 'null' ? Json::decode($this->form_column_calls) : [];
     }
-
 }
