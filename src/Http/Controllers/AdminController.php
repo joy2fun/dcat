@@ -84,7 +84,7 @@ class AdminController extends Controller
     {
         /** @var Grid  */
         $grid = $this->grid();
-        if (request()->is('api/*')) {
+        if (app('admin.omni')->isApiRequest()) {
             $grid->build();
             $paginator = $grid->model()->paginator();
             if ($paginator instanceof LengthAwarePaginator) {
@@ -119,7 +119,7 @@ class AdminController extends Controller
      */
     public function show($id, Content $content)
     {
-        if (request()->is('api/*')) {
+        if (app('admin.omni')->isApiRequest()) {
             return Admin::json($this->detail($id)->model()->toArray());
         } else {
             if ($this->breadcrumbs ?? null) {
