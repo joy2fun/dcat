@@ -8,7 +8,7 @@ trait PlainInput
 
     protected $append;
 
-    public function prepend($string)
+    public function prepend($string = '')
     {
         $this->prepend = $string;
 

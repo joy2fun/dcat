@@ -9,14 +9,20 @@ use Dcat\Admin\Widgets\Modal as WidgetModal;
 class Modal extends AbstractDisplayer
 {
     protected $title;
+    protected $buttonText;
 
     protected $xl = false;
 
-    protected $icon = 'fa-clone';
+    protected $icon = '';
 
     public function title(string $title)
     {
         $this->title = $title;
+    }
+
+    public function label(string $text)
+    {
+        $this->buttonText = $text;
     }
 
     public function xl()
@@ -74,7 +80,7 @@ class Modal extends AbstractDisplayer
     protected function renderButton()
     {
         $icon = $this->icon ? "<i class='fa {$this->icon}'></i>&nbsp;&nbsp;" : '';
-
-        return "<a href='javascript:void(0)'>{$icon}{$this->value}</a>";
+        $text = $this->buttonText ?: $this->value;
+        return "<a href='javascript:void(0)'>{$icon}{$text}</a>";
     }
 }
