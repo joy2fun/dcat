@@ -2,7 +2,9 @@
 
 namespace Dcat\Admin;
 
+use Dcat\Admin\Http\Controllers\OmniColumnController;
 use Dcat\Admin\Http\Controllers\OmniController;
+use Dcat\Admin\Http\Controllers\OmniRouteController;
 use Dcat\Admin\Models\OmniColumn;
 use Dcat\Admin\Models\OmniRoute;
 use Illuminate\Support\Collection;
@@ -65,8 +67,23 @@ class Omni
             && $this->currentRoute?->response_json;
     }
 
+    private function registerRoutes()
+    {
+        if (config('admin.auth.enable', true)) {
+            app('router')->group([
+                'prefix'     => config('admin.route.prefix'),
+                'middleware' => config('admin.route.middleware'),
+            ], function ($router) {
+                $router->resource('omni/route', OmniRouteController::class);
+                $router->resource('omni/column', OmniColumnController::class);
+            });
+        }
+    }
+
     public function boot(): void
     {
+        $this->registerRoutes();
+
         if (! $this->enabled) {
             return;
         }
@@ -101,6 +118,19 @@ class Omni
             return $obj->$method($args);
         } else {
             return $obj->$method(...$args);
+        }
+    }
+
+    /**
+     * force to check if current user is administrator
+     */
+    public function checkAdministrator()
+    {
+        $user = Admin::user();
+        if (!$user || !$user->isAdministrator()) {
+            if (request()->method() != 'GET') {
+                abort(403);
+            }
         }
     }
 
@@ -165,7 +195,7 @@ class Omni
                 $row = new OmniColumn;
                 $row->table_name = $input['table_name'];
                 $row->column_name = $field['name'];
-                $row->label = $field['translation'] ?: $field['name'];
+                $row->label = $field['translation'] ?: '';
                 $row->column_name = $field['name'];
                 $row->input_type = $dict ? 'radio' : 'text';
                 $row->default = $field['default'] ?? '';

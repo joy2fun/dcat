@@ -18,7 +18,7 @@ class OmniColumnController extends AdminController
     protected function grid()
     {
         return Grid::make((new OmniColumn)->orderByDesc('id'), function (Grid $grid) {
-            $grid->column('table_name', 'table')->link(fn ($v) => admin_url('omni-route?table_name='.$v));
+            $grid->column('table_name', 'table')->link(fn ($v) => admin_url('omni/route?table_name='.$v));
             $grid->column('column_name', 'column')->editable();
             $grid->column('label')->editable();
             $grid->column('input_type')->editable();
@@ -31,8 +31,9 @@ class OmniColumnController extends AdminController
             // $grid->column('form_calls');
         
             $grid->filter(function (Grid\Filter $filter) {
-                $filter->panel();
+                $filter->panel()->expand();
                 $filter->equal('table_name', 'table')->width(2);
+                $filter->equal('column_name', 'column')->width(2);
                 $filter->equal('grid_showed', 'in grid')->select(OmniColumn::grid_showed)->width(2);
                 $filter->equal('mode')->select(OmniColumn::mode)->width(2);
             });
@@ -79,6 +80,7 @@ class OmniColumnController extends AdminController
      */
     protected function form()
     {
+        app('admin.omni')->checkAdministrator();
         return Form::make((new OmniColumn)->orderByDesc('id'), function (Form $form) {
             
             $form->text('table_name');
@@ -90,8 +92,15 @@ class OmniColumnController extends AdminController
             $form->radio('mode')->options(OmniColumn::mode)->default(0);
             $form->text('rules');
             $form->jsoneditor('dict')->rules('json');
-            $form->jsoneditor('grid_column_calls')->rules('json');
-            $form->jsoneditor('form_column_calls')->rules('json');
+            $form->jsoneditor('grid_column_calls')->rules('json')
+                ->help($this->helpLink('help', 'Dcat\Admin\Grid\Column'));
+            $form->jsoneditor('form_column_calls')->rules('json')
+                ->help($this->helpLink('help', 'Dcat\Admin\Form\Field'));
         });
+    }
+
+    private function helpLink($text, $class)
+    {
+        return sprintf('<a href="%s" target="_blank">%s</a>', admin_url('?show_source=' . $class), $text);
     }
 }

@@ -7,8 +7,6 @@ use Dcat\Admin\Contracts\ExceptionHandler;
 use Dcat\Admin\Contracts\Repository;
 use Dcat\Admin\Exception\InvalidArgumentException;
 use Dcat\Admin\Http\Controllers\AuthController;
-use Dcat\Admin\Http\Controllers\OmniColumnController;
-use Dcat\Admin\Http\Controllers\OmniRouteController;
 use Dcat\Admin\Http\JsonResponse;
 use Dcat\Admin\Layout\Menu;
 use Dcat\Admin\Layout\Navbar;
@@ -602,8 +600,6 @@ class Admin
                 $router->get('auth/logout', $authController.'@getLogout');
                 $router->get('auth/setting', $authController.'@getSetting');
                 $router->put('auth/setting', $authController.'@putSetting');
-                $router->resource('omni-route', OmniRouteController::class);
-                $router->resource('omni-column', OmniColumnController::class);
             });
         }
 

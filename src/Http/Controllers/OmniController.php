@@ -85,7 +85,7 @@ class OmniController extends AdminController
                     continue;
                 }
 
-                $_ = $form->{$options['input_type'] ?? 'text'}($options->column_name, $options->label);
+                $_ = $form->{$options['input_type'] ?? 'text'}($options->column_name, $options->label ?: null);
 
                 if ($options->rules) {
                     $_->rules($options->rules);

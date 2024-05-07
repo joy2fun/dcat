@@ -156,6 +156,22 @@ class AdminTablesSeeder extends Seeder
             [
                 'parent_id'     => 2,
                 'order'         => 7,
+                'title'         => 'Omni Routes',
+                'icon'          => '',
+                'uri'           => 'omni/route',
+                'created_at'    => $createdAt,
+            ],
+            [
+                'parent_id'     => 2,
+                'order'         => 8,
+                'title'         => 'Omni Columns',
+                'icon'          => '',
+                'uri'           => 'omni/column',
+                'created_at'    => $createdAt,
+            ],
+            [
+                'parent_id'     => 2,
+                'order'         => 9,
                 'title'         => 'Extensions',
                 'icon'          => '',
                 'uri'           => 'auth/extensions',
