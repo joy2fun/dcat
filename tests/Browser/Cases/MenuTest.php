@@ -46,14 +46,14 @@ class MenuTest extends TestCase
 
             // 检测是否写入数据库
             $this->assertDatabase($newMenuId, $item);
-            $this->assertEquals(8, Menu::count());
+            $this->assertEquals(10, Menu::count());
         });
     }
 
     public function testDeleteMenu()
     {
         $this->delete('admin/auth/menu/8');
-        $this->assertEquals(7, Menu::count());
+        $this->assertEquals(9, Menu::count());
     }
 
     public function testEditMenu()
@@ -69,7 +69,7 @@ class MenuTest extends TestCase
                 ->waitForLocation(admin_base_path('auth/menu'), 2);
 
             $this->seeInDatabase(config('admin.database.menu_table'), ['title' => $newTitle])
-                ->assertEquals(7, Menu::count());
+                ->assertEquals(9, Menu::count());
         });
     }
 
