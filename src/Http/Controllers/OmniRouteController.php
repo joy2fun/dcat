@@ -23,6 +23,7 @@ class OmniRouteController extends AdminController
             $grid->column('enabled')->dropdown(OmniRoute::enabled);
             $grid->column('soft_deleted')->dropdown(OmniRoute::enabled);
             $grid->column('response_json')->dropdown(OmniRoute::enabled);
+            $grid->column('conn_name');
             $grid->column('table_name')->link(fn ($v) => admin_url('omni/column?table_name=' . $v));
             $grid->column('model_name')->link(fn ($v) => admin_url('?show_source=' . $v), '_blank');
             // $grid->column('calls')->display(fn ($v) => sprintf('<pre>%s</pre>', ($v)));
@@ -30,6 +31,7 @@ class OmniRouteController extends AdminController
 
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->panel()->expand();
+                $filter->equal('conn_name', 'Conn')->width(2);
                 $filter->equal('table_name', 'Table')->width(2);
                 $filter->like('uri')->width(2);
                 $filter->equal('enabled')->select(OmniRoute::enabled)->width(2);
@@ -69,23 +71,42 @@ class OmniRouteController extends AdminController
         return Form::make(new OmniRoute(), function (Form $form) {
             $form->radio('enabled')->options(OmniRoute::enabled)->default("1");
             $form->radio('soft_deleted')->options(OmniRoute::enabled)->default("1");
-            $form->radio('response_json')->options(OmniRoute::enabled)->default("1");
+            $form->radio('response_json')->options(OmniRoute::enabled)->default(0);
             $form->text('uri')->required();
+            $form->text('conn_name');
             $form->text('table_name')->required();
             $form->text('model_name');
-            $form->jsoneditor('calls')->rules('json');
-            $form->jsoneditor('grid_model_calls')->rules('json');
+            $form->jsoneditor('calls')->rules('json')
+->help(
+'<pre>
+{
+  "middleware": ["web", "admin"]
+}
+</pre>');
+            $form->jsoneditor('grid_model_calls')->rules('json')
+                ->help($this->helpLink('Query Builder', 'https://laravel.com/api/11.x/Illuminate/Database/Query/Builder.html'));
             $form->jsoneditor('filter_calls')->rules('json')
-                ->help($this->helpLink('help', 'Dcat\Admin\Grid\Filter'));
+                ->help($this->helpClassLink('help', 'Dcat\Admin\Grid\Filter'));
             $form->jsoneditor('detail_model_calls')->rules('json');
-            $form->jsoneditor('grid_calls')->rules('json');
+            $form->jsoneditor('grid_calls')->rules('json')
+->help(
+'<pre>
+{
+  "showColumnSelector": []
+}
+</pre>');
             $form->jsoneditor('form_calls')->rules('json')
-                ->help($this->helpLink('help', 'Dcat\Admin\Widgets\Form'));
+                ->help($this->helpClassLink('help', 'Dcat\Admin\Widgets\Form'));
         });
     }
 
-    private function helpLink($text, $class)
+    private function helpClassLink($text, $class)
     {
         return sprintf('<a href="%s" target="_blank">%s</a>', admin_url('?show_source=' . $class), $text);
+    }
+
+    private function helpLink($text, $link)
+    {
+        return sprintf('<a href="%s" target="_blank">%s</a>', $link, $text);
     }
 }

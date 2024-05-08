@@ -27,7 +27,8 @@ class Omni extends Model
 
     protected function init()
     {
-        $connection = config('admin.database.connection') ?: config('database.default');
+        $connection = app('admin.omni')->getCurrentRoute()?->conn_name 
+            ?: config('admin.database.connection') ?: config('database.default');
 
         $this->setConnection($connection);
 

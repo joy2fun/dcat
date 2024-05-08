@@ -18,7 +18,9 @@
         'lang' => (trans('admin.scaffold.create_lang')),
         'omni' => 'Omni',
     ]);
-    old('create') ? $actionCreators->check(old('create')) : $actionCreators->checkAll(['migration', 'migrate']);
+    old('create') ? $actionCreators->check(old('create')) : $actionCreators->checkAll([
+        'migration', 'migrate', 'repository', 'lang', 'controller'
+        ]);
 @endphp
 <style>
     .select2-container .select2-selection--single {
@@ -38,21 +40,24 @@
             <div class="form-horizontal">
 
                 <div class="form-group row">
-
-{{--                    <label for="inputTableName" class="col-sm-1 control-label text-capitalize">{{(trans('admin.scaffold.table'))}}</label>--}}
-
-                    <div for="inputTableName"  class="col-sm-1 control-label text-capitalize">
+                    <div for="inputTableName"  class="col-2 control-label text-capitalize">
                         <span>{{(trans('admin.scaffold.table'))}}</span>
                     </div>
 
-                    <div class="col-sm-2 ">
+                    <div class="col-2 ">
+                        <div class="input-group">
+                            <input type="text" name="conn_name" class="form-control" id="connName" placeholder="connection" value="{{ old('conn_name') }}">
+                        </div>
+                    </div>
+
+                    <div class="col-2 ">
                         <div class="input-group">
                             <input type="text" name="table_name" class="form-control" id="inputTableName" placeholder="{{(trans('admin.scaffold.table'))}}" value="{{ old('table_name') }}">
 
                         </div>
                     </div>
 
-                    <div class=" col-sm-2" style="margin-left: -15px;">
+                    <div class="col-3" style="margin-left: -15px;">
                         <select class="choose-exist-table"  name="exist-table">
                             <option value="0" selected>{{trans('admin.scaffold.choose')}}</option>
                             @foreach($tables as $db => $tb)
@@ -71,34 +76,34 @@
 
                 </div>
                 <div class="form-group row">
-                    <span for="inputModelName" class="col-sm-1 control-label text-capitalize">{{(trans('admin.scaffold.model'))}}</span>
+                    <span for="inputModelName" class="col-2 control-label text-capitalize">{{(trans('admin.scaffold.model'))}}</span>
 
-                    <div class="col-sm-4">
+                    <div class="col-6">
                         <input type="text" name="model_name" class="form-control text-capitalize" id="inputModelName" placeholder="{{(trans('admin.scaffold.model'))}}" value="{{ old('model_name', "App\\Models\\") }}">
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <span for="inputControllerName" class="col-sm-1 control-label text-capitalize">{{(trans('admin.scaffold.controller'))}}</span>
+                    <span for="inputControllerName" class="col-2 control-label text-capitalize">{{(trans('admin.scaffold.controller'))}}</span>
 
-                    <div class="col-sm-4">
+                    <div class="col-6">
                         <input type="text" name="controller_name" class="form-control text-capitalize" id="inputControllerName" placeholder="{{(trans('admin.scaffold.controller'))}}" value="{{ old('controller_name', $namespaceBase."\\Controllers\\") }}">
                     </div>
                 </div>
 
 
                 <div class="form-group row">
-                    <span for="inputRepositoryName" class="col-sm-1 control-label text-capitalize">{{(trans('admin.scaffold.repository'))}}</span>
+                    <span for="inputRepositoryName" class="col-2 control-label text-capitalize">{{(trans('admin.scaffold.repository'))}}</span>
 
-                    <div class="col-sm-4">
+                    <div class="col-6">
                         <input type="text" name="repository_name" class="form-control text-capitalize" id="inputRepositoryName" placeholder="{{(trans('admin.scaffold.repository'))}}" value="{{ old('repository_name', $namespaceBase."\\Repositories\\") }}">
                     </div>
                 </div>
 
                 <div class="form-group row">
-                    <span for="omniRouteURI" class="col-sm-1 control-label">Route URI</span>
+                    <span for="omniRouteURI" class="col-2 control-label">Omni Route URI</span>
 
-                    <div class="col-sm-4">
+                    <div class="col-6">
                         <input type="text" name="omni_route_uri" class="form-control" id="omniRouteURI" value="">
                     </div>
                 </div>
@@ -135,7 +140,7 @@
                                 <input type="text" name="fields[{{$index}}][translation]" class="form-control" placeholder="{{trans('admin.scaffold.translation')}}" value="{{$field['translation']}}" />
                             </td>
                             <td>
-                                <select style="width: 200px" name="fields[{{$index}}][type]">
+                                <select style="width: 100px" name="fields[{{$index}}][type]">
                                     @foreach($dbTypes as $type)
                                         <option value="{{ $type }}" {{$field['type'] == $type ? 'selected' : '' }}>{{$type}}</option>
                                     @endforeach
@@ -152,7 +157,7 @@
                                 </div>
                             </td>
                             <td>
-                                <select style="width: 150px" name="fields[{{$index}}][key]">
+                                <select style="width: 100px" name="fields[{{$index}}][key]">
                                     {{--<option value="primary">Primary</option>--}}
                                     <option value="" {{$field['key'] == '' ? 'selected' : '' }}>NULL</option>
                                     <option value="unique" {{$field['key'] == 'unique' ? 'selected' : '' }}>Unique</option>
@@ -176,7 +181,7 @@
                             <input type="text" name="fields[0][translation]" class="form-control" placeholder="{{trans('admin.scaffold.translation')}}" />
                         </td>
                         <td>
-                            <select style="width: 200px" name="fields[0][type]">
+                            <select style="width: 150px" name="fields[0][type]">
                                 @foreach($dbTypes as $type)
                                     <option value="{{ $type }}">{{$type}}</option>
                                 @endforeach
@@ -192,7 +197,7 @@
                                 </span>
                             </div>
                         <td>
-                            <select style="width: 150px" name="fields[0][key]">
+                            <select style="width: 100px" name="fields[0][key]">
                                 {{--<option value="primary">Primary</option>--}}
                                 <option value="" selected>NULL</option>
                                 <option value="unique">Unique</option>
@@ -219,8 +224,8 @@
                     <button type="button" class="btn btn-sm btn-primary btn-outline text-capitalize ml-1" id="sync-translation-with-comment"><i class="feather icon-repeat"></i>&nbsp;&nbsp;{{(trans('admin.scaffold.sync_translation_with_comment'))}}</button>
                 </div>
 
-                <div class="row">
-                    <div class="form-group text-capitalize" style="margin-right: 20px;">
+                <div class="row mt-1">
+                    <div class="form-group text-capitalize" style="margin: 0 20px;">
                         <span for="titleTranslation">{{(trans('admin.scaffold.translate_title'))}}&nbsp;&nbsp;</span>
                         <input type="text"
                                name="translate_title"
@@ -274,7 +279,7 @@
             <input type="text" value="{translation}" name="fields[__index__][translation]" class="form-control" placeholder="{{trans('admin.scaffold.translation')}}" />
         </td>
         <td>
-            <select style="width: 200px" name="fields[__index__][type]">
+            <select style="width: 150px" name="fields[__index__][type]">
                 @foreach($dbTypes as $type)
                     <option value="{{ $type }}">{{$type}}</option>
                 @endforeach
@@ -290,7 +295,7 @@
                 </span>
             </div>
         <td>
-            <select style="width: 150px" name="fields[__index__][key]">
+            <select style="width: 100px" name="fields[__index__][key]">
                 <option value="" selected>NULL</option>
                 <option value="unique">Unique</option>
                 <option value="index">Index</option>
@@ -405,6 +410,7 @@
                 url: '{{ admin_url('helpers/scaffold/table') }}',
                 data: {db: db, tb: tb},
                 success: function (res) {
+                    $('#connName').val(db);
                     Dcat.loading(false);
 
                     if (!res.list) return;

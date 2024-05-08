@@ -225,6 +225,7 @@ class Omni
             if (!$route) {
                 $route = new OmniRoute;
                 $route->uri = $input['omni_route_uri'];
+                $route->conn_name =  $input['conn_name'];
                 $route->table_name =  $input['table_name'];
                 $route->soft_deleted = ($input['soft_deletes'] ?? 0) ? 1 : 0;
                 $route->model_name = class_exists($input['model_name']) ? $input['model_name'] : '';

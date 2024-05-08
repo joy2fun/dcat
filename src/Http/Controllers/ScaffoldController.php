@@ -191,15 +191,15 @@ class ScaffoldController extends Controller
      */
     public function table()
     {
-        $db = addslashes(\request('db'));
+        $conn = addslashes(\request('db'));
         $table = \request('tb');
-        if (! $table || ! $db) {
+        if (! $table || ! $conn) {
             return ['status' => 1, 'list' => []];
         }
 
-        $tables = collect($this->getDatabaseColumns($db, $table))
-            ->filter(function ($v, $k) use ($db) {
-                return $k == $db;
+        $tables = collect($this->getDatabaseColumns($conn, $table))
+            ->filter(function ($v, $k) use ($conn) {
+                return $k == $conn;
             })->map(function ($v) use ($table) {
                 return Arr::get($v, $table);
             })
@@ -212,7 +212,7 @@ class ScaffoldController extends Controller
     /**
      * @return array
      */
-    protected function getDatabaseColumns($db = null, $tb = null)
+    protected function getDatabaseColumns($conn = null, $tb = null)
     {
         $databases = Arr::where(config('database.connections', []), function ($value) {
             $supports = ['mysql'];
@@ -224,7 +224,7 @@ class ScaffoldController extends Controller
 
         try {
             foreach ($databases as $connectName => $value) {
-                if ($db && $db != $value['database']) {
+                if ($conn && $conn != $connectName) {
                     continue;
                 }
 
@@ -241,17 +241,21 @@ class ScaffoldController extends Controller
                 $tmp = DB::connection($connectName)->select($sql);
 
                 $collection = collect($tmp)->map(function ($v) use ($value) {
-                    if (! $p = Arr::get($value, 'prefix')) {
-                        return (array) $v;
-                    }
                     $v = (array) $v;
+                    if (! $p = Arr::get($value, 'prefix')) {
+                        return $v;
+                    }
+                    
+                    if (! Str::startsWith($v['TABLE_NAME'], $p)) {
+                        return null;
+                    }
 
                     $v['TABLE_NAME'] = Str::replaceFirst($p, '', $v['TABLE_NAME']);
 
                     return $v;
-                });
+                })->filter();
 
-                $data[$value['database']] = $collection->groupBy('TABLE_NAME')->map(function ($v) {
+                $data[$connectName] = $collection->groupBy('TABLE_NAME')->map(function ($v) {
                     return collect($v)->keyBy('COLUMN_NAME')->map(function ($v) {
                         $v['COLUMN_TYPE'] = strtolower($v['COLUMN_TYPE']);
                         $v['DATA_TYPE'] = strtolower($v['DATA_TYPE']);

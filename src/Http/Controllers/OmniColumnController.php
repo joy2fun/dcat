@@ -90,17 +90,22 @@ class OmniColumnController extends AdminController
             $form->text('default');
             $form->radio('grid_showed')->options(OmniColumn::grid_showed)->default("1");
             $form->radio('mode')->options(OmniColumn::mode)->default(0);
-            $form->text('rules');
+            $form->text('rules')->help($this->helpLink('rules', 'https://laravel.com/docs/11.x/validation#available-validation-rules'));
             $form->jsoneditor('dict')->rules('json');
             $form->jsoneditor('grid_column_calls')->rules('json')
-                ->help($this->helpLink('help', 'Dcat\Admin\Grid\Column'));
+                ->help($this->helpClassLink('help', 'Dcat\Admin\Grid\Column'));
             $form->jsoneditor('form_column_calls')->rules('json')
-                ->help($this->helpLink('help', 'Dcat\Admin\Form\Field'));
+                ->help($this->helpClassLink('help', 'Dcat\Admin\Form\Field'));
         });
     }
 
-    private function helpLink($text, $class)
+    private function helpClassLink($text, $class)
     {
         return sprintf('<a href="%s" target="_blank">%s</a>', admin_url('?show_source=' . $class), $text);
+    }
+
+    private function helpLink($text, $link)
+    {
+        return sprintf('<a href="%s" target="_blank">%s</a>', $link, $text);
     }
 }
