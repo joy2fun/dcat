@@ -89,7 +89,7 @@ class OmniRouteController extends AdminController
                 ->help($this->helpClassLink('help', 'Dcat\Admin\Grid\Filter'));
             $form->jsoneditor('detail_model_calls')->rules('json');
             $form->jsoneditor('grid_calls')->rules('json')
-->help(
+->help($this->helpClassLink('methods', 'Dcat\Admin\Grid', 1) . 
 '<pre>
 {
   "showColumnSelector": []
@@ -100,9 +100,9 @@ class OmniRouteController extends AdminController
         });
     }
 
-    private function helpClassLink($text, $class)
+    private function helpClassLink($text, $class, $methods=0)
     {
-        return sprintf('<a href="%s" target="_blank">%s</a>', admin_url('?show_source=' . $class), $text);
+        return sprintf('<a href="%s" target="_blank">%s</a>', admin_url("?show_source=$class&methods=$methods"), $text);
     }
 
     private function helpLink($text, $link)
