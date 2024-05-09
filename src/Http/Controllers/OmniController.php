@@ -26,7 +26,17 @@ class OmniController extends AdminController
 
         return Grid::make($model, function (Grid $grid) use ($omni) {
             foreach($omni->getCurrentRoute()->gridCallsArray as $func => $args) {
-                $omni->call($grid, $func, $args);
+                if ($func == 'export') {
+                    list($exporterClass, $exporterCalls) = $args;
+                    $exporter = $grid->export($exporterClass);
+                    if ($exporterCalls) {
+                        foreach($exporterCalls as $exportFunc => $exportArgs) {
+                            $omni->call($exporter, $exportFunc, $exportArgs);
+                        }
+                    }
+                } else {
+                    $omni->call($grid, $func, $args);
+                }
             }
 
             $grid->filter(function (Grid\Filter $filter) use ($omni) {
