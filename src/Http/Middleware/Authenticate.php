@@ -5,9 +5,10 @@ namespace Dcat\Admin\Http\Middleware;
 use Closure;
 use Dcat\Admin\Admin;
 use Dcat\Admin\Support\Helper;
-use Illuminate\Http\Request;
+use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Support\Facades\Auth;
 
-class Authenticate
+class Authenticate extends Middleware
 {
     /**
      * Handle an incoming request.
@@ -16,19 +17,28 @@ class Authenticate
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, ...$guards)
     {
+        if ($guards) {
+            // set Bearer token from query string if needed
+            if ($request->get('token') && ! $request->hasHeader('Authorization')) {
+                $request->headers->set('Authorization', 'Bearer ' . $request->get('token'));
+            }
+            // always response json when exception occurred
+            $request->headers->set('Accept', 'application/json', true);
+            $this->authenticate($request, $guards);
+            Admin::guard()->setUser($request->user());
+            return $next($request);
+        }
+
         if (
             !config('admin.auth.enable', true)
             || !Admin::guard()->guest()
             || $this->shouldPassThrough($request)
         ) {
+            // better for telescope
+            Auth::setUser(Admin::user());
             return $next($request);
-        }
-
-        // TODO: omni api request
-        if ($request->is('api/*')) {
-            abort(401);
         }
 
         return admin_redirect('auth/login', 401);
