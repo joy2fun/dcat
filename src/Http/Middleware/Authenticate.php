@@ -25,7 +25,9 @@ class Authenticate extends Middleware
                 $request->headers->set('Authorization', 'Bearer ' . $request->get('token'));
             }
             // always response json when exception occurred
-            $request->headers->set('Accept', 'application/json', true);
+            if ($request->hasHeader('Authorization')) {
+                $request->headers->set('Accept', 'application/json', true);
+            }
             $this->authenticate($request, $guards);
             Admin::guard()->setUser($request->user());
             return $next($request);
