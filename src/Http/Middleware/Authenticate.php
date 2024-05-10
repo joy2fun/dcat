@@ -7,6 +7,7 @@ use Dcat\Admin\Admin;
 use Dcat\Admin\Support\Helper;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 
 class Authenticate extends Middleware
 {
@@ -19,15 +20,13 @@ class Authenticate extends Middleware
      */
     public function handle($request, Closure $next, ...$guards)
     {
-        if ($guards) {
+        if ($guards && current($guards) == 'sanctum') {
             // set Bearer token from query string if needed
             if ($request->get('token') && ! $request->hasHeader('Authorization')) {
                 $request->headers->set('Authorization', 'Bearer ' . $request->get('token'));
             }
             // always response json when exception occurred
-            if ($request->hasHeader('Authorization')) {
-                $request->headers->set('Accept', 'application/json', true);
-            }
+            $request->headers->set('Accept', 'application/json', true);
             $this->authenticate($request, $guards);
             Admin::guard()->setUser($request->user());
             return $next($request);
