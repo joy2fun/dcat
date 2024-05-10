@@ -38,7 +38,10 @@ class Authenticate extends Middleware
             || $this->shouldPassThrough($request)
         ) {
             // better for telescope
-            Auth::setUser(Admin::user());
+            if (Admin::user()) {
+                Auth::setUser(Admin::user());
+            }
+
             return $next($request);
         }
 
