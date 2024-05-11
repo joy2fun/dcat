@@ -398,9 +398,13 @@ class EloquentRepository extends Repository implements TreeRepository
      * @param  Form  $form
      * @return array|\Illuminate\Contracts\Support\Arrayable
      */
-    public function edit(Form $form)
+    public function edit(Form $form, $lock = false)
     {
         $query = $this->newQuery();
+
+        if ($lock) {
+            $query->lockForUpdate();
+        }
 
         if ($this->isSoftDeletes) {
             $query->withTrashed();
@@ -475,7 +479,7 @@ class EloquentRepository extends Repository implements TreeRepository
      */
     public function updating(Form $form)
     {
-        return $this->edit($form);
+        return $this->edit($form, true);
     }
 
     /**
@@ -606,7 +610,7 @@ class EloquentRepository extends Repository implements TreeRepository
      */
     public function deleting(Form $form)
     {
-        $query = $this->newQuery();
+        $query = $this->newQuery()->lockForUpdate();
 
         if ($this->isSoftDeletes) {
             $query->withTrashed();
