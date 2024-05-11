@@ -2,11 +2,13 @@
 
 namespace Dcat\Admin\Exception;
 
+use Dcat\Admin\Admin;
 use Dcat\Admin\Contracts\ExceptionHandler;
 use Dcat\Admin\Support\Helper;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\ViewErrorBag;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class Handler implements ExceptionHandler
 {
@@ -41,7 +43,10 @@ class Handler implements ExceptionHandler
             throw $exception;
         }
 
-        // TODO: omni api request 
+        if (app('admin.omni')->isApiRequest()) {
+            return Admin::json()->withException($exception)
+                ->send(); // make sure to be early returnd
+        }
 
         if (Helper::isAjaxRequest()) {
             return;
@@ -68,6 +73,9 @@ class Handler implements ExceptionHandler
      */
     public function report(\Throwable $e)
     {
+        if ($e instanceof BadRequestException) {
+            return false;
+        }
         report($e);
     }
 

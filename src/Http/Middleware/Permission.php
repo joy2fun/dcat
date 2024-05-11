@@ -44,8 +44,7 @@ class Permission
         if (!$user->allPermissions()->first(function ($permission) use ($request) {
             return $permission->shouldPassThrough($request);
         })) {
-            // TODO: omni api request
-            if ($request->is('api/*')) {
+            if (app('admin.omni')->isApiRequest()) {
                 abort(403);
             }
             Checker::error();

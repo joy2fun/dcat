@@ -85,22 +85,19 @@ class Permission extends Model implements Sortable
      */
     public function shouldPassThrough(Request $request): bool
     {
-        if (!$this->http_path) {
+        if (! $this->http_path) {
             return false;
         }
 
         $method = $this->http_method;
 
-        // TODO: omni api request
-        $isApi = $request->is('api/*');
-
-        $matches = array_map(function ($path) use ($method, $isApi) {
+        $matches = array_map(function ($path) use ($method) {
             if (Str::contains($path, ':')) {
                 [$method, $path] = explode(':', $path);
                 $method = explode(',', $method);
             }
 
-            $path = Str::contains($path, '.') ? $path : ltrim($isApi ? ((Str::startsWith($path, 'api') ? $path : 'api/' . ltrim($path, '/'))) : admin_base_path($path), '/');
+            $path = Str::contains($path, '.') ? $path : ltrim(admin_base_path($path), '/');
 
             return compact('method', 'path');
         }, $this->http_path);

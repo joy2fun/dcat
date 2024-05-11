@@ -20,8 +20,7 @@ class PermissionController extends AdminController
 
     public function index(Content $content)
     {
-        // TODO: omni api request
-        if (request()->is('api/*')) {
+        if (app('admin.omni')->isApiRequest()) {
             $permission = new Permission();
             $list = ModelsPermission::all()->sortBy('order');
             return Admin::json($permission->toTree($list->toArray()));
