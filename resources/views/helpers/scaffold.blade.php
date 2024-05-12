@@ -8,6 +8,9 @@
         $soft->check(1);
     }
 
+    $omniResponseJson = Dcat\Admin\Widgets\Checkbox::make('omni_response_json')->inline();
+    $omniResponseJson->options([1 => 'JSON API'])->check(1);
+
     $actionCreators = Dcat\Admin\Widgets\Checkbox::make('create[]')->inline();
     $actionCreators->options([
         'migration' => (trans('admin.scaffold.create_migration')),
@@ -103,9 +106,12 @@
                 <div class="form-group row">
                     <span for="omniRouteURI" class="col-2 control-label">Omni Route URI</span>
 
-                    <div class="col-6">
+                    <div class="col-4">
                         <input type="text" name="omni_route_uri" class="form-control" id="omniRouteURI" value="">
                     </div>
+
+                    {!! $omniResponseJson->render(); !!}
+
                 </div>
 
                 <div class="form-group row">

@@ -640,7 +640,7 @@ class Admin
      */
     public static function registerHelperRoutes()
     {
-        if (! config('admin.helpers.enable', true) || ! config('app.debug')) {
+        if (! config('admin.helpers.enable', true)) {
             return;
         }
 

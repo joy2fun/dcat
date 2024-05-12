@@ -26,9 +26,8 @@ class OmniColumnController extends AdminController
             $grid->column('grid_showed', 'In grid')->dropdown(OmniColumn::grid_showed);
             $grid->column('mode')->dropdown(OmniColumn::mode);
             $grid->column('rules')->editable();
-            // $grid->column('grid_calls');
-            // $grid->column('filter_calls');
-            // $grid->column('form_calls');
+            $grid->column('form_column_calls')->hide();
+            $grid->column('grid_column_calls')->hide();
         
             $grid->filter(function (Grid\Filter $filter) {
                 $filter->panel()->expand();
@@ -40,6 +39,7 @@ class OmniColumnController extends AdminController
 
             $grid->showBatchDelete();
             $grid->showRowSelector();
+            $grid->showColumnSelector();
         });
     }
 

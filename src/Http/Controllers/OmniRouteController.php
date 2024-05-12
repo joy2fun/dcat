@@ -26,7 +26,7 @@ class OmniRouteController extends AdminController
             $grid->column('conn_name');
             $grid->column('table_name')->link(fn ($v) => admin_url('omni/column?table_name=' . $v));
             $grid->column('model_name')->link(fn ($v) => admin_url('?show_source=' . $v), '_blank');
-            // $grid->column('calls')->display(fn ($v) => sprintf('<pre>%s</pre>', ($v)));
+            $grid->column('calls')->display(fn ($v) => sprintf('<pre>%s</pre>', ($v)))->hide();
             $grid->column('enabled')->dropdown(OmniRoute::enabled);
 
             $grid->filter(function (Grid\Filter $filter) {
@@ -37,6 +37,8 @@ class OmniRouteController extends AdminController
                 $filter->equal('enabled')->select(OmniRoute::enabled)->width(2);
                 $filter->equal('response_json', 'JSON API')->select(OmniRoute::enabled)->width(2);
             });
+
+            $grid->showColumnSelector();
         });
     }
 
