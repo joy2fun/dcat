@@ -8,6 +8,7 @@ use Dcat\Admin\Http\Controllers\OmniRouteController;
 use Dcat\Admin\Models\OmniColumn;
 use Dcat\Admin\Models\OmniRoute;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 class Omni
@@ -85,6 +86,10 @@ class Omni
         $this->registerRoutes();
 
         if (! $this->enabled) {
+            return;
+        }
+
+        if (App::runningInConsole() && (($_SERVER['argv'][1] ?? '') !== 'route:list')) {
             return;
         }
 
