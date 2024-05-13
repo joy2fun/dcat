@@ -140,31 +140,6 @@ class Asset
                 '@admin/dcat/plugins/ionslider/ion.rangeSlider.skinNice.css',
             ],
         ],
-        '@editor-md' => [
-            'js' => [
-                '@admin/dcat/plugins/editor-md/lib/raphael.min.js',
-                '@admin/dcat/plugins/editor-md/lib/marked.min.js',
-                '@admin/dcat/plugins/editor-md/lib/prettify.min.js',
-                '@admin/dcat/plugins/editor-md/lib/underscore.min.js',
-                '@admin/dcat/plugins/editor-md/lib/sequence-diagram.min.js',
-                '@admin/dcat/plugins/editor-md/lib/flowchart.min.js',
-                '@admin/dcat/plugins/editor-md/lib/jquery.flowchart.min.js',
-                '@admin/dcat/plugins/editor-md/editormd.min.js',
-            ],
-            'css' => [
-                '@admin/dcat/plugins/editor-md/css/editormd.preview.min.css',
-                '@admin/dcat/extra/markdown.css',
-            ],
-        ],
-        '@editor-md-form' => [
-            'js' => [
-                '@admin/dcat/plugins/editor-md/lib/raphael.min.js',
-                '@admin/dcat/plugins/editor-md/editormd.min.js',
-            ],
-            'css' => [
-                '@admin/dcat/plugins/editor-md/css/editormd.min.css',
-            ],
-        ],
         '@jquery.inputmask' => [
             'js' => '@admin/dcat/plugins/input-mask/jquery.inputmask.bundle.min.js',
         ],
