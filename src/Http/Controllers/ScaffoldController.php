@@ -64,6 +64,10 @@ class ScaffoldController extends Controller
 
     public function index(Content $content)
     {
+        if (! Admin::user()->isAdministrator()) {
+            Permission::error();
+        }
+
         if ($tableName = request('singular')) {
             return $this->singular($tableName);
         }
