@@ -12,6 +12,7 @@ cp -rf ./composer.json ./laravel-tests/dcat-admin
 rm -rf ./laravel-tests/tests
 cp -rf ./tests ./laravel-tests/tests
 cp -f ./phpunit.dusk.xml ./laravel-tests
+cp -f ./.env.testing ./laravel-tests/.env
 cd ./laravel-tests
 php artisan admin:composer-config
 composer require dcat/laravel-admin:*@dev
