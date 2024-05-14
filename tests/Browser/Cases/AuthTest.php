@@ -35,7 +35,7 @@ class AuthTest extends TestCase
     public function testLogin()
     {
         $this->browse(function (Browser $browser) {
-            $credentials = ['username' => 'admin', 'password' => 'admin'];
+            $credentials = ['username' => 'admin', 'password' => '123456'];
 
             $browser->visit(admin_base_path('auth/login'))
                 ->assertPathIs(admin_base_path('auth/login'))

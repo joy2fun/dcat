@@ -18,8 +18,8 @@ class AdminTablesSeeder extends Seeder
         // create a user.
         Administrator::truncate();
         Administrator::create([
-            'username'   => 'admin',
-            'password'   => bcrypt('admin'),
+            'username'   => env('ADMIN_ROOT_USERNAME', 'admin'),
+            'password'   => env('ADMIN_ROOT_PASSWORD_HASH', bcrypt(uniqid())),
             'name'       => 'Administrator',
             'created_at' => $createdAt,
         ]);

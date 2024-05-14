@@ -102,6 +102,14 @@ php artisan admin:publish
 
 在该命令会生成配置文件`config/admin.php`，可以在里面修改安装的地址、数据库连接、以及表名，建议都是用默认配置不修改。
 
+配置 root 账号密码：
+```sh
+ADMIN_ROOT_USERNAME=admin
+# 使用 bcrypt 生成的 hash，不可使用明文，如果不设置此环境变量，将生成随机密码
+# 以下是密码默认 admin 的 hash
+ADMIN_ROOT_PASSWORD_HASH='$2a$10$qjE2vD23fhbGFWNA6umTuedPlHqEAIKRxTIyyy80x5jrpUT6UEh6K'
+```
+
 然后运行下面的命令完成安装：
 
 > 执行这一步命令可能会报以下错误`Specified key was too long ... 767 bytes`，如果出现这个报错，请在`app/Providers/AppServiceProvider.php`文件的`boot`方法中加上代码`\Schema::defaultStringLength(191);`，然后删除掉数据库中的所有数据表，再重新运行一遍`php artisan admin:install`命令即可。
