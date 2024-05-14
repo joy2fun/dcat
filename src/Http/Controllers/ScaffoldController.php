@@ -64,10 +64,6 @@ class ScaffoldController extends Controller
 
     public function index(Content $content)
     {
-        if (! config('app.debug')) {
-            Permission::error();
-        }
-
         if ($tableName = request('singular')) {
             return $this->singular($tableName);
         }
