@@ -107,7 +107,7 @@ php artisan admin:publish
 ADMIN_ROOT_USERNAME=admin
 # 使用 bcrypt 生成的 hash，不可使用明文，如果不设置此环境变量，将生成随机密码
 # 以下是密码默认 admin 的 hash
-ADMIN_ROOT_PASSWORD_HASH='$2a$10$qjE2vD23fhbGFWNA6umTuedPlHqEAIKRxTIyyy80x5jrpUT6UEh6K'
+ADMIN_ROOT_PASSWORD_HASH='$2y$12$C3mABmNkCU08cR7vNDJSJOfjVwnQf/I.emy2YPENqdde6WTiUc0Se'
 ```
 
 然后运行下面的命令完成安装：
