@@ -286,32 +286,32 @@ return [
         'connection' => '',
 
         // User tables and model.
-        'users_table' => 'admin_users',
+        'users_table' => env('ADMIN_DB_PREFIX', 'admin_') . 'users',
         'users_model' => Dcat\Admin\Models\Administrator::class,
 
         // Role table and model.
-        'roles_table' => 'admin_roles',
+        'roles_table' => env('ADMIN_DB_PREFIX', 'admin_') . 'roles',
         'roles_model' => Dcat\Admin\Models\Role::class,
 
         // Permission table and model.
-        'permissions_table' => 'admin_permissions',
+        'permissions_table' => env('ADMIN_DB_PREFIX', 'admin_') . 'permissions',
         'permissions_model' => Dcat\Admin\Models\Permission::class,
 
         // Menu table and model.
-        'menu_table' => 'admin_menu',
+        'menu_table' => env('ADMIN_DB_PREFIX', 'admin_') . 'menu',
         'menu_model' => Dcat\Admin\Models\Menu::class,
 
         // Pivot table for table above.
-        'role_users_table'       => 'admin_role_users',
-        'role_permissions_table' => 'admin_role_permissions',
-        'role_menu_table'        => 'admin_role_menu',
-        'permission_menu_table'  => 'admin_permission_menu',
-        'settings_table'         => 'admin_settings',
-        'extensions_table'       => 'admin_extensions',
-        'extension_histories_table' => 'admin_extension_histories',
+        'role_users_table'       => env('ADMIN_DB_PREFIX', 'admin_') . 'role_users',
+        'role_permissions_table' => env('ADMIN_DB_PREFIX', 'admin_') . 'role_permissions',
+        'role_menu_table'        => env('ADMIN_DB_PREFIX', 'admin_') . 'role_menu',
+        'permission_menu_table'  => env('ADMIN_DB_PREFIX', 'admin_') . 'permission_menu',
+        'settings_table'         => env('ADMIN_DB_PREFIX', 'admin_') . 'settings',
+        'extensions_table'       => env('ADMIN_DB_PREFIX', 'admin_') . 'extensions',
+        'extension_histories_table' => env('ADMIN_DB_PREFIX', 'admin_') . 'extension_histories',
 
-        'omni_route_table' => 'admin_omni_route',
-        'omni_column_table' => 'admin_omni_column',
+        'omni_route_table' => env('ADMIN_DB_PREFIX', 'admin_') . 'omni_route',
+        'omni_column_table' => env('ADMIN_DB_PREFIX', 'admin_') . 'omni_column',
     ],
 
     'omni' => [
