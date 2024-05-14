@@ -2,6 +2,7 @@
 
 cd ./laravel-tests
 php artisan admin:publish --force
+cp -f ./.env.testing ./laravel-tests/.env
 php artisan admin:install
 php artisan migrate:rollback
 # php artisan dusk:chrome-driver 109
