@@ -23,7 +23,7 @@ class OmniRouteController extends AdminController
         return Grid::make((new OmniRoute)->orderByDesc('id'), function (Grid $grid) {
             $grid->column('id')->link(fn ($v) => admin_url('omni/route/' . $v . '/edit'));
             $grid->column('title')->editable();
-            $grid->column('uri')->link();
+            $grid->column('uri')->link(fn ($v) => '/' . $v);
             $grid->column('enabled')->dropdown(OmniRoute::enabled);
             $grid->column('soft_deleted')->dropdown(OmniRoute::enabled);
             $grid->column('response_json')->dropdown(OmniRoute::enabled);
