@@ -27,11 +27,17 @@ class Omni extends Model
 
     protected function init()
     {
-        $connection = app('admin.omni')->getCurrentRoute()?->conn_name 
-            ?: config('admin.database.connection') ?: config('database.default');
+        $route = app('admin.omni')->getCurrentRoute();
+        if (! $route) {
+            abort(404);
+        }
+
+        $connection = $route->conn_name 
+            ?: config('admin.database.connection') 
+            ?: config('database.default');
 
         $this->setConnection($connection);
-
         $this->setTable(app('admin.omni')->getTableName());
+        $this->timestamps = $route->getOriginal('timestamps') > 0;
     }
 }

@@ -226,12 +226,14 @@ class Omni
 
         if ($input['omni_route_uri']) {
             $route = new OmniRoute;
+            $route->title = str($input['table_name'])->title();
             $route->uri = $input['omni_route_uri'];
             $route->conn_name =  $input['conn_name'];
             $route->table_name =  $input['table_name'];
             $route->soft_deleted = ($input['soft_deletes'] ?? 0) ? 1 : 0;
             $route->model_name = class_exists($input['model_name']) ? $input['model_name'] : '';
             $route->response_json = $input['omni_response_json'] ?? 0;
+            $route->timestamps = $input['timestamps'] ?? 0;
             $route->filter_calls = json_encode($filterCalls, JSON_UNESCAPED_UNICODE);
             $route->form_calls = '{}';
             $route->grid_calls = json_encode($gridCalls, JSON_UNESCAPED_UNICODE);

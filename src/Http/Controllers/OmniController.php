@@ -15,6 +15,7 @@ class OmniController extends AdminController
     {
         $omni = app('admin.omni');
         $currentRoute = $omni->getCurrentRoute();
+        $this->setTitle($currentRoute?->title);
         $model = new $currentRoute->modelClass;
 
         foreach($currentRoute->gridModelCallsArray as $func => $args) {
@@ -75,6 +76,7 @@ class OmniController extends AdminController
     {
         $omni = app('admin.omni');
         $currentRoute = $omni->getCurrentRoute();
+        $this->setTitle($currentRoute?->title);
         $model = new $currentRoute->modelClass;
 
         foreach($currentRoute->detailModelCallsArray as $func => $args) {

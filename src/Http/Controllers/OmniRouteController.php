@@ -10,6 +10,9 @@ use Dcat\Admin\Models\OmniRoute;
 
 class OmniRouteController extends AdminController
 {
+
+    protected $title = 'Routes';
+
     /**
      * Make a grid builder.
      *
@@ -19,10 +22,12 @@ class OmniRouteController extends AdminController
     {
         return Grid::make((new OmniRoute)->orderByDesc('id'), function (Grid $grid) {
             $grid->column('id')->link(fn ($v) => admin_url('omni/route/' . $v . '/edit'));
-            $grid->column('uri');
+            $grid->column('title')->editable();
+            $grid->column('uri')->link();
             $grid->column('enabled')->dropdown(OmniRoute::enabled);
             $grid->column('soft_deleted')->dropdown(OmniRoute::enabled);
             $grid->column('response_json')->dropdown(OmniRoute::enabled);
+            $grid->column('timestamps')->dropdown(OmniRoute::enabled);
             $grid->column('conn_name');
             $grid->column('table_name')->link(fn ($v) => admin_url('omni/column?table_name=' . $v));
             $grid->column('model_name')->link(fn ($v) => admin_url('?show_source=' . $v), '_blank');
@@ -71,9 +76,11 @@ class OmniRouteController extends AdminController
     {
         app('admin.omni')->checkAdministrator();
         return Form::make(new OmniRoute(), function (Form $form) {
+            $form->text('title');
             $form->radio('enabled')->options(OmniRoute::enabled)->default("1");
             $form->radio('soft_deleted')->options(OmniRoute::enabled)->default("1");
             $form->radio('response_json')->options(OmniRoute::enabled)->default(0);
+            $form->radio('timestamps')->options(OmniRoute::enabled)->default(0);
             $form->text('uri')->required();
             $form->text('conn_name');
             $form->text('table_name')->required();

@@ -49,6 +49,11 @@ class AdminController extends Controller
         return $this->title ?: admin_trans_label();
     }
 
+    protected function setTitle($title)
+    {
+        return $this->title = $title;
+    }
+
     /**
      * Get description for following 4 action pages.
      *

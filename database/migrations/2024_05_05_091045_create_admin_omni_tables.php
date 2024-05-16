@@ -23,12 +23,14 @@ return new class extends Migration
     {
         Schema::create($this->config('database.omni_route_table'), function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('title')->default('');
             $table->string('uri')->default('');
             $table->string('conn_name')->nullable()->default('');
             $table->string('table_name')->default('');
             $table->unsignedTinyInteger('enabled')->default('1')->comment('1=Y 0=N');
             $table->unsignedTinyInteger('soft_deleted')->default('1')->comment('1=Y 0=N');
             $table->unsignedTinyInteger('response_json')->default('0')->comment('1=Y 0=N');
+            $table->unsignedTinyInteger('timestamps')->default('0')->comment('1=Y 0=N');
             $table->string('model_name')->nullable();
             $table->text('calls')->nullable();
             $table->text('grid_model_calls')->nullable();
