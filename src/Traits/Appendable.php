@@ -15,7 +15,7 @@ trait Appendable {
      * @param $appendsArray
      * @param bool $replaceExisting
      */
-    public static function setStaticAppends($appendsArray, $replaceExisting = false)
+    public static function setStaticAppends($appendsArray, $replaceExisting = true)
     {
         if($replaceExisting) {
             static::$static_replace_appends = true;
@@ -41,6 +41,12 @@ trait Appendable {
             }
         }
         return parent::getArrayableAppends();
+    }
+
+    public function appends(array $fields)
+    {
+        static::setStaticAppends($fields, false);
+        return $this;
     }
 
 }

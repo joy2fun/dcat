@@ -2,6 +2,7 @@
 
 namespace Dcat\Admin\Models;
 
+use Dcat\Admin\Traits\Appendable;
 use Dcat\Admin\Traits\HasDateTimeFormatter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
 class Omni extends Model
 {
     use HasDateTimeFormatter;
+    use Appendable;
 
     public function __construct(array $attributes = [])
     {
