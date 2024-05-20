@@ -43,7 +43,7 @@ trait Appendable {
         return parent::getArrayableAppends();
     }
 
-    public function appends(array $fields)
+    public function withAppends(array $fields)
     {
         static::setStaticAppends($fields, false);
         return $this;

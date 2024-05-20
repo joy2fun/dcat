@@ -7,6 +7,7 @@ use Dcat\Admin\Http\Controllers\OmniController;
 use Dcat\Admin\Http\Controllers\OmniRouteController;
 use Dcat\Admin\Models\OmniColumn;
 use Dcat\Admin\Models\OmniRoute;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
@@ -83,6 +84,10 @@ class Omni
 
     public function boot(): void
     {
+        Builder::macro('withAppends', function ($columns) {
+            return $this->getModel()->withAppends($columns);
+        });
+
         $this->registerRoutes();
 
         if (! $this->enabled) {

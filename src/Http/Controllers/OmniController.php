@@ -22,7 +22,7 @@ class OmniController extends AdminController
             $model = $omni->call($model, $func, $args);
         }
 
-        return Grid::make($model, function (Grid $grid) use ($omni) {
+        return Grid::make($model, function (Grid $grid) use ($omni, $model) {
             foreach($omni->getCurrentRoute()->gridCallsArray as $func => $args) {
                 if ($func == 'export') {
                     list($exporterClass, $exporterCalls) = $args;
@@ -31,6 +31,10 @@ class OmniController extends AdminController
                         foreach($exporterCalls as $exportFunc => $exportArgs) {
                             $omni->call($exporter, $exportFunc, $exportArgs);
                         }
+                    }
+                } elseif ($func == 'exportAppends') {
+                    if (request('_export_')) {
+                        $model->appends($args);
                     }
                 } else {
                     $omni->call($grid, $func, $args);
