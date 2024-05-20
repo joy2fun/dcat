@@ -3,33 +3,9 @@
 namespace Dcat\Admin\Models;
 
 use Dcat\Admin\Traits\HasDateTimeFormatter;
-use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Casts\Json;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * App\Models\OmniRoute
- *
- * @property int $id
- * @property string $uri
- * @property string $table_name
- * @property string|null $calls
- * @property int $enabled 启用: 1=是 0=否
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read mixed $calls_array
- * @method static \Illuminate\Database\Eloquent\Builder|OmniRoute newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|OmniRoute newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|OmniRoute query()
- * @method static \Illuminate\Database\Eloquent\Builder|OmniRoute whereCalls($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OmniRoute whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OmniRoute whereEnabled($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OmniRoute whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OmniRoute whereTableName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OmniRoute whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|OmniRoute whereUri($value)
- * @mixin \Eloquent
- */
 class OmniRoute extends Model
 {
     use HasDateTimeFormatter;
@@ -88,5 +64,21 @@ class OmniRoute extends Model
     public function getFilterCallsArrayAttribute()
     {
         return $this->filter_calls && $this->filter_calls !== 'null' ? Json::decode($this->filter_calls) : [];
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::updated(function(OmniRoute $model) {
+            if ($model->wasChanged('response_json')) {
+                $model->calls = json_encode([
+                    'middleware' => $model->response_json 
+                        ? ['admin.auth:sanctum']
+                        : ['web', 'admin']
+                ], JSON_UNESCAPED_SLASHES);
+                $model->saveQuietly();
+            }
+        });
     }
 }

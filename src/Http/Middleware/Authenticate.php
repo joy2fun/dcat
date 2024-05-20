@@ -20,7 +20,7 @@ class Authenticate extends Middleware
      */
     public function handle($request, Closure $next, ...$guards)
     {
-        if ($guards && current($guards) == 'sanctum') {
+        if ($guards) {
             // set Bearer token from query string if needed
             if ($request->get('token') && ! $request->hasHeader('Authorization')) {
                 $request->headers->set('Authorization', 'Bearer ' . $request->get('token'));
