@@ -270,6 +270,8 @@ return [
             'file'  => 'files',
         ],
 
+        'preview_url_append_qs' => env('ADMIN_PREVIEW_URL_QS'),
+
     ],
 
     /*

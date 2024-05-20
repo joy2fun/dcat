@@ -133,12 +133,13 @@ class File extends Field implements UploadFieldInterface
     protected function initialPreviewConfig()
     {
         $previews = [];
+        $qs = config('admin.upload.preview_url_append_qs');
 
         foreach (Helper::array($this->value()) as $value) {
             $previews[] = [
                 'id'   => $value,
                 'path' => Helper::basename($value),
-                'url'  => $this->objectUrl($value) . env('OSS_PREVIEW_QS'),
+                'url'  => $this->objectUrl($value) . $qs,
             ];
         }
 
