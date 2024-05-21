@@ -34,7 +34,7 @@ class OmniController extends AdminController
                     }
                 } elseif ($func == 'exportAppends') {
                     if (request('_export_')) {
-                        $model->appends($args);
+                        $model->withAppends($args);
                     }
                 } else {
                     $omni->call($grid, $func, $args);
