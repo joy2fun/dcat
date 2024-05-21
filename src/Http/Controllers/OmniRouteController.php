@@ -23,12 +23,12 @@ class OmniRouteController extends AdminController
         return Grid::make((new OmniRoute)->orderByDesc('id'), function (Grid $grid) {
             $grid->column('id')->link(fn ($v) => admin_url('omni/route/' . $v . '/edit'));
             $grid->column('title')->editable();
-            $grid->column('uri')->link(fn ($v) => '/' . $v);
+            $grid->column('uri')->link(fn ($v) => '/' . $v, '_blank');
             $grid->column('enabled')->dropdown(OmniRoute::enabled);
-            $grid->column('soft_deleted')->dropdown(OmniRoute::enabled);
-            $grid->column('response_json')->dropdown(OmniRoute::enabled);
-            $grid->column('timestamps')->dropdown(OmniRoute::enabled);
-            $grid->column('conn_name');
+            $grid->column('response_json', 'JSON API')->dropdown(OmniRoute::enabled);
+            $grid->column('timestamps')->dropdown(OmniRoute::enabled)->hide();
+            $grid->column('soft_deleted')->dropdown(OmniRoute::enabled)->hide();
+            $grid->column('conn_name')->hide();
             $grid->column('table_name')->link(fn ($v) => admin_url('omni/column?table_name=' . $v));
             $grid->column('model_name')->link(fn ($v) => admin_url('?show_source=' . $v), '_blank');
             $grid->column('calls')->display(fn ($v) => sprintf('<pre>%s</pre>', ($v)))->hide();
@@ -101,7 +101,15 @@ class OmniRouteController extends AdminController
 ->help($this->helpClassLink('methods', 'Dcat\Admin\Grid', 1) . 
 '<pre>
 {
-  "showColumnSelector": []
+  "showColumnSelector": [],
+  "export": [
+    "ExporterClass or null",
+    [
+      "filename": "test",
+    ]
+  ],
+  "exportAppends": [],
+  "withAppends: []
 }
 </pre>');
             $form->jsoneditor('form_calls')->rules('json')
