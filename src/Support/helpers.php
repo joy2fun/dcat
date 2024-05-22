@@ -593,3 +593,21 @@ if (! function_exists('format_byte')) {
         return round($value, $dec).$prefix_arr[$i];
     }
 }
+
+if (! function_exists('admin_is_mobile')) {
+    function admin_is_mobile() {
+        if (defined('IS_MOBILE')) {
+            return IS_MOBILE;
+        }
+
+        $pattern = '/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|' .
+            'compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge ' .
+            '|maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|' .
+            'palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|' .
+            'symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|' .
+            'xda|xiino/i';
+        define('IS_MOBILE', preg_match($pattern, $_SERVER['HTTP_USER_AGENT'] ?? ''));
+
+        return IS_MOBILE;
+    }
+}

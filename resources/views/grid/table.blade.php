@@ -9,7 +9,7 @@
 
     {!! $grid->renderHeader() !!}
 
-    @if (defined('IS_MOBILE') && IS_MOBILE)
+    @if (admin_is_mobile())
     <div class="{!! $grid->formatTableParentClass() !!}">
     @foreach($grid->rows() as $row)
         <div class="card">
