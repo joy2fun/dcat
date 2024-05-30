@@ -15,9 +15,13 @@
         <div class="card">
             <ul class="list-group list-group-flush">
                 @foreach($grid->getVisibleColumns() as $column)
-                    <li class="list-group-item"}>
-                        {!! $column->getLabel() !!}：
+                    <li class="list-group-item">
+                        @if ($key == '__row_selector__')
+                        {!! $row->column($column->getName()) !!}
+                        @else
+                        {!! $column->getLabel() !!}
                         <span class="float-right">{!! $row->column($column->getName()) !!}</span>
+                        @endif
                     </li>
                 @endforeach
             </ul>
