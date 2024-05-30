@@ -7,6 +7,7 @@ use Dcat\Admin\Contracts\ExceptionHandler;
 use Dcat\Admin\Contracts\Repository;
 use Dcat\Admin\Exception\InvalidArgumentException;
 use Dcat\Admin\Http\Controllers\AuthController;
+use Dcat\Admin\Http\Controllers\PersonalAccessTokenController;
 use Dcat\Admin\Http\JsonResponse;
 use Dcat\Admin\Layout\Menu;
 use Dcat\Admin\Layout\Navbar;
@@ -600,6 +601,7 @@ class Admin
                 $router->get('auth/logout', $authController.'@getLogout');
                 $router->get('auth/setting', $authController.'@getSetting');
                 $router->put('auth/setting', $authController.'@putSetting');
+                $router->resource('auth/personal-access-token', PersonalAccessTokenController::class)->only(['index', 'destroy']);
             });
         }
 
@@ -629,7 +631,6 @@ class Admin
             $router->post('value', 'ValueController@handle')->name('value');
             $router->get('render', 'RenderableController@handle')->name('render');
             $router->post('tinymce/upload', 'TinymceController@upload')->name('tinymce.upload');
-            $router->post('editor-md/upload', 'EditorMDController@upload')->name('editor-md.upload');
         });
     }
 
