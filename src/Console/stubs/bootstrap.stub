@@ -24,3 +24,14 @@ use Dcat\Admin\Show;
  * Admin::js('/packages/prettydocs/js/main.js');
  *
  */
+
+// fixed user panel & dropdown menu
+Admin::style('
+    .header-navbar.navbar-with-menu div.navbar-container {
+        display: block !important;
+        height: 60px !important;
+    }
+    div.d-sm-flex {
+        display: flex !important;
+    }
+');
