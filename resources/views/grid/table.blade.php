@@ -14,7 +14,7 @@
     @foreach($grid->rows() as $row)
         <div class="card">
             <ul class="list-group list-group-flush">
-                @foreach($grid->getVisibleColumns() as $column)
+                @foreach($grid->getVisibleColumns() as $key => $column)
                     <li class="list-group-item">
                         @if ($key == '__row_selector__')
                         {!! $row->column($column->getName()) !!}
