@@ -104,7 +104,7 @@ class ScaffoldController extends Controller
 
     public function store(Request $request)
     {
-        if (! config('app.debug')) {
+        if (! Admin::user()->isAdministrator()) {
             Permission::error();
         }
 
