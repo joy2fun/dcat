@@ -65,8 +65,8 @@ class Omni
 
     public function isApiRequest()
     {
-        return $this->enabled 
-            && $this->currentRoute?->response_json;
+        return ($this->enabled && $this->currentRoute?->response_json)
+            || request()->attributes->get('omni_is_api_request');
     }
 
     private function registerRoutes()
