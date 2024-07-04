@@ -51,4 +51,4 @@ jobs:
         run: sh ./tests/bin/start.sh
 
       - name: Run test suite
-        run: cd ./laravel-tests && php artisan dusk:chrome-driver 124 && php artisan dusk
+        run: cd ./laravel-tests && php artisan dusk:chrome-driver 126 && php artisan dusk
