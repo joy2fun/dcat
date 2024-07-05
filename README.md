@@ -102,10 +102,11 @@ php artisan admin:publish
 
 在该命令会生成配置文件`config/admin.php`，可以在里面修改安装的地址、数据库连接、以及表名，建议都是用默认配置不修改。
 
-配置 root 账号密码：
+通过环境变量配置 root 账号密码：
 ```sh
 ADMIN_ROOT_USERNAME=admin
-# 使用 bcrypt 生成的 hash，不可使用明文，如果不设置此环境变量，将生成随机密码
+ADMIN_ROOT_PASSWORD=admin
+# 使用 bcrypt 生成的 hash，非明文，如果不设置此环境变量，将使用明文密码 ADMIN_ROOT_PASSWORD
 # 以下是密码默认 admin 的 hash
 ADMIN_ROOT_PASSWORD_HASH='$2y$12$C3mABmNkCU08cR7vNDJSJOfjVwnQf/I.emy2YPENqdde6WTiUc0Se'
 ```
