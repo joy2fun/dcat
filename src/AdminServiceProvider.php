@@ -72,6 +72,7 @@ class AdminServiceProvider extends ServiceProvider
         'admin.upload'     => Http\Middleware\WebUploader::class,
         'admin.app'        => Http\Middleware\Application::class,
         'admin.omni'       => Http\Middleware\Omni::class,
+        'admin.is_api'     => Http\Middleware\OmniApiMarker::class,
         'admin.show_source' => Http\Middleware\ShowSource::class,
     ];
 
