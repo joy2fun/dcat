@@ -22,7 +22,7 @@
         'omni' => 'Omni',
     ]);
     old('create') ? $actionCreators->check(old('create')) : $actionCreators->checkAll([
-        'migration', 'migrate', 'repository', 'lang', 'controller'
+        'migration', 'migrate', 'repository', 'lang', 'omni'
         ]);
 @endphp
 <style>
