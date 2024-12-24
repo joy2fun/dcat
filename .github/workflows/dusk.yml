@@ -17,6 +17,12 @@ jobs:
 
       - uses: actions/checkout@v4
 
+      - name: Get installed Chrome version
+        run: |
+          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+' | head -n 1)
+          echo "CHROME_VERSION=$CHROME_VERSION" >> $GITHUB_ENV
+          echo $CHROME_VERSION
+
       - name: Composer Update
         run: composer self-update --2
 
@@ -51,4 +57,4 @@ jobs:
         run: sh ./tests/bin/start.sh
 
       - name: Run test suite
-        run: cd ./laravel-tests && php artisan dusk:chrome-driver 126 && php artisan dusk
+        run: cd ./laravel-tests && php artisan dusk:chrome-driver ${CHROME_VERSION} && php artisan dusk
