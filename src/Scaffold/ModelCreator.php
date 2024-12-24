@@ -77,7 +77,6 @@ class ModelCreator
             ->replaceTable($stub, $this->name)
             ->replaceTimestamp($stub, $timestamps)
             ->replacePrimaryKey($stub, $keyName)
-            ->replaceMappings($stub)
             ->replaceSpace($stub)
             ;
 
@@ -244,26 +243,6 @@ class ModelCreator
     public function replaceSpace($stub)
     {
         return str_replace(["\n\n\n", "\n    \n"], ["\n\n", ''], $stub);
-    }
-
-    public function replaceMappings(&$stub)
-    {
-        $content = '';
-
-        foreach(request('fields') as $field) {
-            $count = preg_match_all('~(?<keys>[0-9]+)[=]?(?<values>[^\s=,]+)~isx', $field['comment'], $match);
-            if ($count > 1) {
-                $content .= "    " . sprintf("const %s = [\n", $field['name']);
-                foreach($match['keys'] as $i => $key) {
-                    $content .= "        " . sprintf('%d => "%s",%s', $key, $match['values'][$i], "\n");
-                }
-                $content .= "    ];\n\n";
-            }
-        }
-
-        $stub = str_replace('DummyMappings', trim($content), $stub);
-
-        return $this;
     }
 
     /**

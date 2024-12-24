@@ -17,7 +17,8 @@ class DummyClass extends AdminController
      */
     protected function grid()
     {
-        return Grid::make(new DummyModel(), function (Grid $grid) {
+        return Grid::make(DummyModel::with([]), function (Grid $grid) {
+            // $grid->model()->orderByDesc('id');
             {grid}
         });
     }
@@ -31,7 +32,7 @@ class DummyClass extends AdminController
      */
     protected function detail($id)
     {
-        return Show::make($id, new DummyModel(), function (Show $show) {
+        return Show::make($id, DummyModel::with([]), function (Show $show) {
             {show}
         });
     }
@@ -43,7 +44,7 @@ class DummyClass extends AdminController
      */
     protected function form()
     {
-        return Form::make(new DummyModel(), function (Form $form) {
+        return Form::make(DummyModel::with([]), function (Form $form) {
             {form}
         });
     }
