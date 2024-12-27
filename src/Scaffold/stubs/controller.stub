@@ -18,6 +18,7 @@ class DummyClass extends AdminController
     protected function grid()
     {
         return Grid::make(DummyModel::with([]), function (Grid $grid) {
+            /** @var Grid<DummyModel> $grid */
             // $grid->model()->orderByDesc('id');
             {grid}
         });

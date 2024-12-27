@@ -30,13 +30,7 @@ trait GridCreator
                 continue;
             }
 
-            if (preg_match_all('~(?<keys>[0-9]+)[=]?(?<values>[^\s=,]+)~isx', $field['comment'], $match) > 1) {
-                $guessedOptions = str(request('model_name'))->classBasename() . '::' . $field['name'];
-                $rows[] = "            \$grid->column('{$field['name']}')->dropdown($guessedOptions);";
-                $addtionalFilters .= "                \$filter->equal('{$field['name']}')->select($guessedOptions);\n";
-            } else {
-                $rows[] = "            \$grid->column('{$field['name']}');";
-            }
+            $rows[] = "            \$grid->column('{$field['name']}');";
         }
 
         $addtionalFilters = trim($addtionalFilters);
@@ -46,9 +40,12 @@ trait GridCreator
             $rows[] = '            $grid->column(\'updated_at\')->sortable();';
         }
 
+        $classBasename = str(request('model_name'))->classBasename();
+
         $rows[] = <<<EOF
-        
+
             \$grid->filter(function (Grid\Filter \$filter) {
+                /** @var Grid\Filter<$classBasename> \$filter */
                 \$filter->equal('$primaryKey');
                 $addtionalFilters
             });

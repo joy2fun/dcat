@@ -17,6 +17,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\Macroable;
 
+/**
+ * @template TModel of \Illuminate\Database\Eloquent\Model
+ */
 class Grid
 {
     use HasBuilderEvents;
@@ -434,7 +437,7 @@ class Grid
     /**
      * Get Grid model.
      *
-     * @return Model
+     * @return TModel | Model
      */
     public function model()
     {
@@ -532,7 +535,7 @@ class Grid
 
     /**
      * @param string|string $class
-     * 
+     *
      * @return $this
      */
     public function removeTableClass($class)
@@ -544,7 +547,7 @@ class Grid
 
     /**
      * @param string|string $class
-     * 
+     *
      * @return $this
      */
     public function removeTableParentClass($class)

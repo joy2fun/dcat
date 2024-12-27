@@ -68,6 +68,8 @@ use Illuminate\Support\Traits\Macroable;
  * @method Group group($column, $builder = null, $label = '')
  * @method Newline newline()
  * @method FindInSet findInSet($column, $label = '')
+ *
+ * @template TModel of \Illuminate\Database\Eloquent\Model
  */
 class Filter implements Renderable
 {
@@ -543,7 +545,7 @@ class Filter implements Renderable
     /**
      * @param  string  $key
      * @param  string  $label
-     * @return Scope
+     * @return Scope | TModel
      */
     public function scope($key, $label = '')
     {
