@@ -38,7 +38,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          composer create-project --prefer-dist laravel/laravel laravel-tests 11.*
+          composer create-project --prefer-dist laravel/laravel laravel-tests 12.*
           sh ./tests/bin/install-dep.sh
 
       - name: Install Admin
